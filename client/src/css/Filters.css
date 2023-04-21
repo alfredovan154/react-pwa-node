@@ -1,0 +1,92 @@
+.filter-button {
+   background-color: var(--blue0);
+}
+
+
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.filter-button > span {
+    margin-left: 5px;
+}
+
+.select-filters-container {
+    display: none;
+    flex-direction: column;
+}
+
+.select-filter-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.select-filters {
+    display: flex;
+    flex-direction: column;
+}
+
+.select-filter-title {   
+    font-size: 1rem;
+}
+
+.filter {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    background-color: var(--background1);
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 15px;
+}
+
+.filter-input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 90%;
+    margin-left: 0.5rem;
+    font-size: 15px;
+}
+
+.submit-filters {
+    display: flex;
+    float: right;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 8px;
+    width: 20%;
+    background-color: var(--background3);
+}
+
+.actions-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.4rem;
+    border-radius: 50px;
+    border: 0;
+    cursor: pointer;
+}

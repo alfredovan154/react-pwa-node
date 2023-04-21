@@ -1,0 +1,15 @@
+:root{
+    --background0: #131313;
+    --background1: #242424;
+    --background2: #3e3e3e;
+    --background3: #3e3e3e;
+    --background4: rgb(202, 202, 202);
+    --border-color0: rgb(167, 167, 167);
+    --blue0: #1982c4;
+    --purple0: #6a4c93;
+    --green0: #8ac926;
+    --red0: #ff595e;
+    --yellow0: #ffca3a;
+
+    --bar-menu-height: 100px;
+}

@@ -1,0 +1,28 @@
+.component {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.component:first-child{
+  margin-top: 0;
+}
+
+.component-title {
+  margin-top: 0;
+}
+
+.component-element {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: -webkit-fill-available; 
+}
+
+.component:hover ~ .bar-menu-container > .bar-menu{
+    visibility: hidden;
+    opacity: 0;
+}
+
+.component:hover ~ .bar-menu-container {
+    height: 50px;
+}

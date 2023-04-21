@@ -1,0 +1,50 @@
+.bar-menu-container {
+    position: fixed;
+    left: auto;
+    bottom: 0;
+    width: 100%;
+}
+
+.bar-menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    border-radius: 15px;
+    background-color: var(--background1);
+    height: var(--bar-menu-height);
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s linear;
+    border: 1px solid var(--background3);
+}
+
+.bar-menu-link{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    max-width: 25%;
+    padding: 1rem;
+    color: white;
+}
+
+.bar-menu-link-title{
+    font-size: 0.7em;
+    margin-top: 8px;
+}
+
+.bar-menu-icons{
+    padding: 0.2rem 1rem 0.2rem 1rem;
+}
+
+.icon-active {
+    background-color: var(--background2);
+    border-radius: 20px;
+}
+
+.title-active {
+    font-weight: bold;
+}
