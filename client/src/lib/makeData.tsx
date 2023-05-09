@@ -10,23 +10,25 @@ const range = (len: number) => {
 };
 
 const makeStudent = (): Student => {
-  const randomNumber = Math.floor(Math.random() * 1000);
+  const id = Math.floor(Math.random() * 1000);
+  const enrollNumber = Math.floor(Math.random() * 1000).toString();
   const nombre = faker.name.firstName();
   const apellidoMaterno = faker.name.lastName();
   const apellidoPaterno = faker.name.lastName();
   const nombreCompleto = nombre + " " + apellidoPaterno + " " + apellidoMaterno;
 
   return {
-    expediente: randomNumber,
-    nombre: nombre,
-    apellido_paterno: apellidoPaterno,
-    apellido_materno: apellidoMaterno,
-    nombre_completo: nombreCompleto,
-    semestre: Math.floor(Math.random() * 10),
-    fecha_nacimiento: faker.date.birthdate().toLocaleDateString(),
+    id: id,
+    enrollNumber: enrollNumber,
+    firstName: nombre,
+    surnames: apellidoPaterno + apellidoMaterno,
+    fullName: nombreCompleto,
+    semester: Math.floor(Math.random() * 10),
+    birthdate: faker.date.birthdate().toLocaleDateString(),
     email: faker.internet.email(),
-    genero: faker.name.gender(),
-    telefono: faker.phone.number(),
+    gender: faker.name.gender(),
+    phoneNumber: faker.phone.number(),
+    address: "xd",
   };
 };
 

@@ -14,29 +14,30 @@ import "@/css/Component.css";
 import { Columns } from "@/lib/types";
 
 const Students = () => {
+  const filterUrl = import.meta.env.BASE_URL + "/students"
   const columns = React.useMemo<Array<Columns>>(
     () => [
       {
         Header: "Expediente",
-        accessor: "expediente",
+        accessor: "enrollNumber",
         inputType: "number",
         icon: <IoSearch />,
       },
       {
         Header: "Nombre",
-        accessor: "nombre_completo",
+        accessor: "fullName",
         inputType: "text",
         icon: <IoPerson />,
       },
       {
         Header: "Semestre",
-        accessor: "semestre",
+        accessor: "semester",
         inputType: "number",
         icon: <IoKeypad />,
       },
       {
         Header: "Nacimiento",
-        accessor: "fecha_nacimiento",
+        accessor: "birthdate",
         inputType: "date",
         icon: <IoCalendar />,
       },
@@ -48,19 +49,20 @@ const Students = () => {
       },
       {
         Header: "Género",
-        accessor: "genero",
+        accessor: "gender",
         inputType: "text",
         icon: <IoSearch />,
       },
       {
         Header: "Teléfono",
-        accessor: "telefono",
+        accessor: "phoneNumber",
         inputType: "text",
         icon: <IoCallOutline />,
       },
     ],
     []
   );
+  
   const data = React.useMemo(() => makeStudents(10), []);
 
   return (
