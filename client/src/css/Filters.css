@@ -44,8 +44,8 @@
     justify-content: flex-start;
     flex-direction: row;
     background-color: var(--background1);
-    padding: 1rem;
-    margin-top: 1rem;
+    padding: 0.7rem;
+    margin-top: 0.8rem;
     border-radius: 15px;
 }
 

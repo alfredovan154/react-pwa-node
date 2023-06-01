@@ -1,4 +1,12 @@
 import { IconType } from "react-icons/lib";
+import {
+  IoCalendar,
+  IoCallOutline,
+  IoKeypad,
+  IoMail,
+  IoPerson,
+  IoSearch,
+} from "react-icons/io5";
 
 export interface Student {
   id: number;
@@ -14,16 +22,26 @@ export interface Student {
   address: string;
 }
 
-export interface Columns {
-  Header: string;
-  accessor: string;
-  inputType: "text" | "number" | "date";
+export interface GenericFormFields {
+  name: string;
+  value: string | Date | number | null;
+  inputType: "text" | "number" | "date" | "phone";
   icon: JSX.Element;
 }
 
-export interface Columns {
+export interface GenericAttributes {
   Header: string;
-  accessor: string;
-  inputType: "text" | "number" | "date";
   icon: JSX.Element;
+  isVisibleOnTable: Boolean;
+  accessor: string;
+  inputType: "text" | "number" | "date" | "phone";
+  required: boolean;
+}
+
+export interface GenericField {
+  name: string;
+  inputType: "text" | "number" | "date";
+  required: Boolean;
+  value: string | number | Date;
+
 }

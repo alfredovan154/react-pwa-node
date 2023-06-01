@@ -11,3 +11,10 @@ CREATE TABLE Students(
     phoneNumber VARCHAR(10) NOT NULL,
     address VARCHAR(150)
 );
+
+CREATE TABLE Users(
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(500) NOT NULL,
+    CONSTRAINT UC_USER_EMAIL UNIQUE (email)
+);

@@ -1,0 +1,18 @@
+.ReactModal__Overlay {
+    background-color: var(--background5) !important;
+}
+
+.submit-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.generic-button {
+    padding: 0.5rem;
+    width: 70%;
+    background-color: var(--blue0);
+    border: none;
+    border-radius: 10px;
+}

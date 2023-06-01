@@ -1,6 +1,5 @@
-import express, { Request, Response } from "express";
-import { Model } from "sequelize";
-import xlsx from "xlsx";
+import { Response } from "express";
+import ExcelJS from "exceljs";
 import path from "path";
 import { Templates } from "../enum/Templates";
 import { StudentModel } from "../lib/types";
@@ -9,13 +8,26 @@ export const makeAttendenceSheet = async (
   students: Array<StudentModel>,
   res: Response
 ) => {
-  const filePath = path.join("src/", "resources/", "Templates.xlsx");
-  const outputPath = path.resolve(__dirname, "/../tmp/", "output.xlsx");
-  const workbook = xlsx.readFile(filePath, { cellStyles: true });
-  const attendenceSheet = workbook.Sheets[Templates.ATTENDENCE_SHEET];
+  const outputPath = path.resolve(__dirname, "/../tmp/", "output1.xlsx");
 
+  const workbook = new ExcelJS.Workbook();
+  const ws = workbook.addWorksheet("Attendence");
   const rows = students.map((s, index) => [index, s.enrollNumber, s.fullName]);
-  xlsx.utils.sheet_add_aoa(attendenceSheet, rows, { origin: "A6" });
-  xlsx.writeFile(workbook, outputPath, { compression: true });
+  ws.addTable({
+    name: "Attendence_sheet",
+    ref: "A3",
+    headerRow: true,
+    totalsRow: true,
+    style: {
+        theme: "TableStyleLight15"
+    },
+    columns: [
+      { name: "#", filterButton: true },
+      { name: "Expediente", filterButton: true },
+      { name: "Nombre completo", filterButton: true },
+    ],
+    rows: rows,
+  });
+  await workbook.xlsx.writeFile(outputPath);
   return res.sendFile(outputPath);
 };

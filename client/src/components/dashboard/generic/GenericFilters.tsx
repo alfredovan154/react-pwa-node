@@ -1,7 +1,7 @@
 import React from "react";
 import { IoFilterOutline, IoSearch, IoSearchOutline } from "react-icons/io5";
 import "@/css/Filters.css";
-import { Columns } from "@/lib/types";
+import { GenericAttributes } from "@/lib/types";
 import { IconContext } from "react-icons";
 
 interface Filter {
@@ -10,7 +10,7 @@ interface Filter {
   active: boolean;
 }
 
-const Filters = ({ columns }: { columns: Array<Columns> }) => {
+const Filters = ({ columns }: { columns: Array<GenericAttributes> }) => {
   const [activeFiltersCount, setActiveFiltersCount] = React.useState(0);
   const [selectFiltersIsVisible, setSelectFiltersIsVisible] =
     React.useState(false);

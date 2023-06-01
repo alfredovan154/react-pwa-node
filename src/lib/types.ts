@@ -22,3 +22,14 @@ export interface StudentModel
   phoneNumber: string;
   address: CreationOptional<string>;
 }
+
+export interface UserModel
+  extends Model<
+    InferAttributes<UserModel>,
+    InferCreationAttributes<UserModel>
+  > {
+  id: CreationOptional<number>;
+  email: string;
+  password: string;
+}
+
