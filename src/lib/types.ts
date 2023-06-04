@@ -20,7 +20,7 @@ export interface StudentModel
   email: string;
   gender: string;
   phoneNumber: string;
-  address: CreationOptional<string>;
+  address: string;
 }
 
 export interface UserModel

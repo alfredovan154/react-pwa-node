@@ -1,8 +1,7 @@
-import React from "react";
 import GenericTable from "../generic/GenericTable";
 import Filters from "../generic/GenericFilters";
-import { makeStudents } from "@/lib/makeData";
 import {
+  IoAdd,
   IoCalendar,
   IoCallOutline,
   IoIdCardOutline,
@@ -13,12 +12,22 @@ import {
   IoSearch,
 } from "react-icons/io5";
 import "@/css/Component.css";
-import { GenericAttributes, GenericField } from "@/lib/types";
+import { GenericAttributes, Student, Test } from "@/lib/types";
 import GenericAddUpdateModal from "../generic/GenericAddUpdateModal";
+import { useAuth } from "@/hooks/authHook";
+import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
+import GenericBigButton from "../generic/GenericBigButton";
+import MobileBarMenu from "../mobile_bar_menu/MobileBarMenu";
 
 const Students = () => {
-  const filterUrl = import.meta.env.BASE_URL + "/students";
-  const studentAttributes = React.useMemo<Array<GenericAttributes>>(
+  const auth = useAuth();
+  const [students, setStudents] = useState<Array<Student>>([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [studentSelected, setStudentSelected] = useState<Student | null>(null);
+
+  const studentAttributes = useMemo<Array<GenericAttributes>>(
     () => [
       {
         Header: "Expediente",
@@ -88,23 +97,94 @@ const Students = () => {
     []
   );
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => studentAttributes.filter((detail) => detail.isVisibleOnTable),
     []
   );
 
-  const data = React.useMemo(() => makeStudents(10), []);
+  // Get the students
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = import.meta.env.VITE_BASE_URL + "/students";
+      await axios({
+        method: "get",
+        url: url,
+        headers: {
+          Authorization: auth.getAccessToken(),
+        },
+      }).then((response) => {
+        setStudents(response.data as Array<Student>);
+      });
+    };
+    if (isLoading) {
+      fetchData();
+    }
+    setIsLoading(false);
+  }, [isLoading]);
+
+  const handleUpdateStudent = async (studentUpdated: Student) => {
+    const url = import.meta.env.VITE_BASE_URL + "/students";
+    await axios({
+      method: "post",
+      url: url,
+      data: studentUpdated,
+      headers: {
+        Authorization: auth.getAccessToken(),
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          closeModal();
+          setIsLoading(true);
+        }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
+  };
+
+  // Code for the modal
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setStudentSelected(null);
+    setIsOpen(false);
+  };
+
+  const handleSelect = (student: Student) => {
+    setStudentSelected(student);
+    setIsOpen(true);
+  };
+
+  //const data = React.useMemo(() => makeStudents(10), []);
+  const handleBigButton = () => {
+    setIsOpen(true);
+  };
 
   return (
     <div className="component">
       <h1 className="component-title component-element">Estudiantes</h1>
       <Filters columns={studentAttributes} />
-      <GenericTable columns={columns} data={data} />
+      {students ? (
+        <GenericTable
+          columns={columns}
+          data={students}
+          onSelect={handleSelect}
+        />
+      ) : null}
       <GenericAddUpdateModal
-        isUpdateModal={false}
+        isUpdateModal={studentSelected ? true : false}
         attributes={studentAttributes}
+        elementSelected={studentSelected || ({} as Student)}
+        onUpdate={handleUpdateStudent}
         modalTitle="estudiante"
+        closeModal={closeModal}
+        openModal={openModal}
+        isOpen={modalIsOpen}
       />
+      <GenericBigButton icon={<IoAdd />} callback={handleBigButton} />
     </div>
   );
 };

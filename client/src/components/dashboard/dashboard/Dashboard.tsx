@@ -8,10 +8,14 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  if (!auth.accessToken) {
-    const from = (location.state as string) || "/";
-    navigate(from, { replace: true });
-  }
+  /*
+  React.useEffect(() => {
+    if (auth.getAccessToken() == null || auth.getAccessToken() == "undefined") {
+      const from = (location.state as string) || "/";
+      navigate("/login", {replace: true});
+    }
+  });
+  */
 
   return (
     <>

@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { IconContext } from "react-icons";
 import { NavLink } from "react-router-dom";
-import { IoLibrary, IoLibraryOutline, IoPerson, IoPersonOutline, IoShapesOutline } from "react-icons/io5";
+import {
+  IoLibrary,
+  IoLibraryOutline,
+  IoPerson,
+  IoPersonOutline,
+  IoShapesOutline,
+} from "react-icons/io5";
 import "@/css/MobileBarMenu.css";
 
 const MobileBarMenu = () => {
@@ -16,7 +22,11 @@ const MobileBarMenu = () => {
           <NavLink to="me" className={"bar-menu-link"}>
             {({ isActive }) => (
               <>
-                {isActive ? <IoPerson className="icon-active"/> : <IoPersonOutline />}
+                {isActive ? (
+                  <IoPerson className="icon-active" />
+                ) : (
+                  <IoPersonOutline />
+                )}
                 <span
                   className={
                     "bar-menu-link-title " + (isActive ? "title-active" : "")
@@ -30,7 +40,11 @@ const MobileBarMenu = () => {
           <NavLink to="students" className={"bar-menu-link"}>
             {({ isActive }) => (
               <>
-                {isActive ? <IoLibrary className="icon-active"/> : <IoLibraryOutline />}
+                {isActive ? (
+                  <IoLibrary className="icon-active" />
+                ) : (
+                  <IoLibraryOutline />
+                )}
                 <span
                   className={
                     "bar-menu-link-title " + (isActive ? "title-active" : "")

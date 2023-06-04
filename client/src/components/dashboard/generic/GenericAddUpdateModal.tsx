@@ -1,5 +1,5 @@
 import React from "react";
-import { GenericAttributes, GenericFormFields } from "@/lib/types";
+import { GenericAttributes, GenericFormFields, Student } from "@/lib/types";
 import Modal from "react-modal";
 import "@/css/GenericAddUpdateModal.css";
 
@@ -7,6 +7,11 @@ type Props = {
   attributes: Array<GenericAttributes>;
   isUpdateModal: boolean;
   modalTitle: string;
+  isOpen: boolean;
+  openModal: VoidFunction;
+  closeModal: VoidFunction;
+  elementSelected: Student;
+  onUpdate: (element: Student) => {};
 };
 
 const customModalStyle = {
@@ -20,38 +25,37 @@ const customModalStyle = {
 Modal.setAppElement("#root");
 
 const GenericAddUpdateModal = (props: Props) => {
-  const [fields, setFields] = React.useState<Array<GenericFormFields>>(
-    props.attributes.map((attribute) => ({
-      name: attribute.Header,
-      value: null,
-      inputType: attribute.inputType,
-      icon: attribute.icon,
-    }))
-  );
-  const [modalIsOpen, setIsOpen] = React.useState(true);
+  const [values, setValues] = React.useState<Student>(props.elementSelected);
 
-  const handleChange = () => {};
+  React.useEffect(() => { setValues(props.elementSelected)}, [props.elementSelected] )
 
-  const openModal = () => {
-    setIsOpen(true);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let updatedValues = Object.assign({}, values);
+    updatedValues[e.target.name as keyof Student] = e.target.value.toString();
+    setValues(updatedValues);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    props.onUpdate(values);
   };
 
-  const fieldsInputs = fields.map((field) => {
+  const fieldsInputs = props.attributes.map((field) => {
     return (
-      <div className="select-filter-container" key={field.name}>
-        <span className="field-title">{field.name}</span>
+      <div className="select-filter-container" key={field.accessor}>
+        <span className="field-title">{field.Header}</span>
         <div>
           <div className="filter">
             {field.icon}
             <input
+              value={
+                values[
+                  field.accessor as keyof typeof props.elementSelected
+                ] || ""
+              }
               type={field.inputType}
-              name={field.name}
-              min={1}
-              id={field.name}
+              name={field.accessor}
+              id={field.accessor}
               onChange={handleChange}
               className="filter-input"
             />
@@ -64,11 +68,11 @@ const GenericAddUpdateModal = (props: Props) => {
   return (
     <div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={props.isOpen}
         style={customModalStyle}
-        onRequestClose={closeModal}
+        onRequestClose={props.closeModal}
       >
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <h2>
             {props.isUpdateModal ? "Actualizar " : "Añadir"} {props.modalTitle}
           </h2>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
 import "@/css/LoginForm.css";
 import axios from "axios";
@@ -27,8 +27,9 @@ const LoginForm = () => {
     });
   };
 
-  const handleSubmit = () => {
-    const url = import.meta.env.VITE_BASE_URL + '/login';
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const url = import.meta.env.VITE_BASE_URL + '/user/login';
     axios({
       method: "post",
       url: url,
@@ -38,7 +39,7 @@ const LoginForm = () => {
       },
     }).then((response) => {
       const from = location.state || "/dashboard";
-      auth.signin(response.data.token, () => {
+      auth.signin(response.data.accessToken, () => {
         navigate(from, { replace: true });
       });
     });

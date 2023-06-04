@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import Student from "../model/Student";
 import ErrorMsg from "../enum/ErrorMsg";
+import SucessMsg from "../enum/SuccessMsg";
 const auth = require("../middleware/auth");
 import { makeAttendenceSheet } from "../business/StudentBusiness";
+import { StudentModel } from "../lib/types";
 const studentController = express.Router();
 
 studentController.get("/", auth, async (req: Request, res: Response) => {
@@ -32,12 +34,27 @@ studentController.get(
   }
 );
 
-studentController.post("/", async (req: Request, res: Response) => {
+studentController.post("/", auth, async (req: Request, res: Response) => {
   try {
+    if (req.body.id != null) {
+      await Student.update(req.body, {
+        where: {
+          id: req.body.id,
+        },
+      });
+      return res.status(200).json({
+        message: SucessMsg.STUDENT_UPDATED,
+      });
+    } else {
+      await Student.create(req.body);
+      return res.status(200).json({
+        message: SucessMsg.STUDENT_CREATED,
+      });
+    }
   } catch (error) {
     return res
       .status(500)
-      .json({ message: ErrorMsg.STUDENT_REGISTERED, error: error });
+      .json({ message: ErrorMsg.STUDENT_REGISTERED, error: error.message });
   }
 });
 

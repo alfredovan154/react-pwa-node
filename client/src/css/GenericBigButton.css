@@ -1,0 +1,13 @@
+.generic-big-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  border: none;
+  outline: none;
+  bottom: 130px;
+  right: 20px;
+  border-radius: 100px;
+  padding: 13px;
+  background-color: var(--blue0);
+}

@@ -1,8 +1,18 @@
 import { useSortBy, useTable } from "react-table";
 import "@/css/Table.css";
 import { IoCaretDown, IoCaretUp, IoPencil, IoTrash } from "react-icons/io5";
+import { Student } from "@/lib/types";
 
-const GenericTable = ({ columns, data }: { columns: any; data: any }) => {
+const GenericTable = ({
+  columns,
+  data,
+  onSelect,
+}: {
+  columns: any;
+  data: any;
+  onSelect: (student: Student) => void;
+}) => {
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
@@ -18,7 +28,7 @@ const GenericTable = ({ columns, data }: { columns: any; data: any }) => {
             Header: "Acciones",
             Cell: ({ row }) => (
               <div className="actions-container">
-                <button className="action-button">
+                <button className="action-button" onClick={() => onSelect(row.original as Student)}>
                   <IoPencil />
                 </button>
                 <button className="action-button">
@@ -41,20 +51,18 @@ const GenericTable = ({ columns, data }: { columns: any; data: any }) => {
               className="generic-headers-row"
             >
               {headerGroup.headers.map((column: any) => (
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  <div className="generic-headers" >
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <div className="generic-headers">
                     {column.render("Header")}
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <IoCaretDown className="table-sort-button" />
-                        ) : (
-                          <IoCaretUp className="table-sort-button" />
-                        )
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <IoCaretDown className="table-sort-button" />
                       ) : (
-                        ""
-                      )}
+                        <IoCaretUp className="table-sort-button" />
+                      )
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </th>
               ))}

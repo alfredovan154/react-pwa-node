@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
 import User from "../model/User";
 import ErrorMsg from "../enum/ErrorMsg";
+import SuccessMsg from "../enum/SuccessMsg";
 import UserVO from "../vo/UserVO";
 import jwt from "jsonwebtoken";
-import { token } from "morgan";
+import env from "../lib/env";
 const userController = express.Router();
 
 userController.post("/login", async (req: Request, res: Response) => {
@@ -21,19 +22,18 @@ userController.post("/login", async (req: Request, res: Response) => {
           email: user.email,
           password: user.password,
         },
-        "debugkey"
+        env.SECRET_KEY
       );
-
       return res
         .status(200)
-        .json({ accessToken: token, message: ErrorMsg.USER_NOT_FOUND });
+        .json({ accessToken: token, message: SuccessMsg.LOGIN_USER });
     } else {
-      return res.status(404).json({ message: ErrorMsg.USER_NOT_FOUND });
+      return res.status(500).json({ message: ErrorMsg.USER_NOT_FOUND });
     }
   } catch (error) {
     return res
       .status(500)
-      .json({ message: ErrorMsg.STUDENT_REGISTERED, error: error });
+      .json({ message: ErrorMsg.STUDENT_REGISTERED, error: error.message });
   }
 });
 

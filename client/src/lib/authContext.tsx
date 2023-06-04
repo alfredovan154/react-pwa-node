@@ -4,6 +4,7 @@ export interface AuthContextType {
   accessToken: string | null;
   signin: (accessToken: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
+  getAccessToken: () => string | null;
 }
 
 export const AuthContext = createContext<AuthContextType>(null!);
@@ -28,7 +29,12 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     callback();
   };
 
-  const value = { accessToken, signin, signout};
+  const getAccessToken = (): string | null => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    return accessToken; 
+  };
+
+  const value = { accessToken, signin, signout, getAccessToken};
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
