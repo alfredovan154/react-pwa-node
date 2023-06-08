@@ -10,6 +10,13 @@ export interface Student {
   gender: string;
   phoneNumber: string;
   address: string;
+  alergies?: string;
+}
+
+export interface Filter {
+  name: string;
+  value: string | Date | number;
+  active: boolean;
 }
 
 export interface GenericFormFields {

@@ -1,16 +1,16 @@
 import React from "react";
-import { IoFilterOutline, IoSearch, IoSearchOutline } from "react-icons/io5";
+import { IoFilterOutline, IoSearch } from "react-icons/io5";
 import "@/css/Filters.css";
-import { GenericAttributes } from "@/lib/types";
+import { Filter, GenericAttributes } from "@/lib/types";
 import { IconContext } from "react-icons";
 
-interface Filter {
-  name: string;
-  value: string | Date | number;
-  active: boolean;
-}
-
-const Filters = ({ columns }: { columns: Array<GenericAttributes> }) => {
+const Filters = ({
+  columns,
+  onChangeFilters,
+}: {
+  columns: Array<GenericAttributes>;
+  onChangeFilters: (filters: Array<Filter>) => void;
+}) => {
   const [activeFiltersCount, setActiveFiltersCount] = React.useState(0);
   const [selectFiltersIsVisible, setSelectFiltersIsVisible] =
     React.useState(false);
@@ -29,13 +29,15 @@ const Filters = ({ columns }: { columns: Array<GenericAttributes> }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedFilters = filters.map((filter) => {
       if (filter.name === e.target.name) {
+        let filterActive = true;
         if (e.target.value !== "" && !filter.active) {
           setActiveFiltersCount(activeFiltersCount + 1);
-          return { ...filter, value: e.target.value, active: true };
+          filterActive = true;
         } else if (e.target.value == "" && filter.active) {
           setActiveFiltersCount(activeFiltersCount - 1);
-          return { ...filter, value: e.target.value, active: false };
+          filterActive = false;
         }
+        return { ...filter, value: e.target.value, active: filterActive };
       }
       return filter;
     });
@@ -63,6 +65,12 @@ const Filters = ({ columns }: { columns: Array<GenericAttributes> }) => {
     );
   });
 
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement> ) => {
+    e.preventDefault();
+    const activeFilters = filters.filter(f => f.active);
+    onChangeFilters(activeFilters);
+  }
+
   return (
     <>
       <IconContext.Provider
@@ -80,6 +88,8 @@ const Filters = ({ columns }: { columns: Array<GenericAttributes> }) => {
         <form
           className="select-filters"
           style={{ display: selectFiltersIsVisible ? "flex" : "none" }}
+          onSubmit={handleSubmit}
+          method="post"
         >
           {filterInputs}
           <div className="component-element">

@@ -12,13 +12,12 @@ import {
   IoSearch,
 } from "react-icons/io5";
 import "@/css/Component.css";
-import { GenericAttributes, Student, Test } from "@/lib/types";
+import { Filter, GenericAttributes, Student, Test } from "@/lib/types";
 import GenericAddUpdateModal from "../generic/GenericAddUpdateModal";
 import { useAuth } from "@/hooks/authHook";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import GenericBigButton from "../generic/GenericBigButton";
-import MobileBarMenu from "../mobile_bar_menu/MobileBarMenu";
 
 const Students = () => {
   const auth = useAuth();
@@ -26,7 +25,9 @@ const Students = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [studentSelected, setStudentSelected] = useState<Student | null>(null);
+  const [filters, setFilters] = useState<Array<Filter>>();
 
+  const url = import.meta.env.VITE_BASE_URL + "/students";
   const studentAttributes = useMemo<Array<GenericAttributes>>(
     () => [
       {
@@ -105,13 +106,15 @@ const Students = () => {
   // Get the students
   useEffect(() => {
     const fetchData = async () => {
-      const url = import.meta.env.VITE_BASE_URL + "/students";
       await axios({
         method: "get",
         url: url,
         headers: {
           Authorization: auth.getAccessToken(),
         },
+        data: {
+          filters: filters
+        }
       }).then((response) => {
         setStudents(response.data as Array<Student>);
       });
@@ -123,7 +126,6 @@ const Students = () => {
   }, [isLoading]);
 
   const handleUpdateStudent = async (studentUpdated: Student) => {
-    const url = import.meta.env.VITE_BASE_URL + "/students";
     await axios({
       method: "post",
       url: url,
@@ -142,6 +144,11 @@ const Students = () => {
         console.log(error.message);
       });
   };
+
+  const handleChangeFilters = (filters: Array<Filter>) => {
+    setFilters(filters);
+    setIsLoading(true);
+  }
 
   // Code for the modal
   const openModal = () => {
@@ -166,7 +173,7 @@ const Students = () => {
   return (
     <div className="component">
       <h1 className="component-title component-element">Estudiantes</h1>
-      <Filters columns={studentAttributes} />
+      <Filters columns={studentAttributes} onChangeFilters={handleChangeFilters}/>
       {students ? (
         <GenericTable
           columns={columns}
