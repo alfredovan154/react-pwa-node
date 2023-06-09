@@ -1,20 +1,35 @@
-CREATE TABLE Students(
-    id INTEGER PRIMARY KEY,
-	enrollNumber INTEGER NOT NULL,
-    firstName VARCHAR(50) NOT NULL,
-    surnames VARCHAR(100) NOT NULL,
-    fullName VARCHAR(150) NOT NULL,
-    semester INTEGER NOT NULL,
-    birthdate DATE NOT NULL,
-    email VARCHAR(150) NOT NULL,
-    gender VARCHAR(10) NOT NULL,
-    phoneNumber VARCHAR(10) NOT NULL,
-    address VARCHAR(150)
+CREATE TABLE User (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    pass VARCHAR(500) NOT NULL,
+    role VARCHAR(15) NOT NULL,
+    address VARCHAR(100)
 );
 
-CREATE TABLE Users(
+CREATE TABLE Store (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(500) NOT NULL,
-    CONSTRAINT UC_USER_EMAIL UNIQUE (email)
+    address VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Product (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    store_id INTEGER NOT NULL,
+    CONSTRAINT FK_STORE_ID FOREIGN KEY (store_id) 
+		REFERENCES Store (id)
+);
+
+CREATE TABLE Visitor (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    record_id VARCHAR(50) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    full_name VARCHAR(150) NOT NULL,
+    email VARCHAR(50),
+    birthdate DATE NOT NULL,
+    age INTEGER NOT NULL,
+    birth_state VARCHAR(50) NOT NULL
 );

@@ -5,31 +5,52 @@ import {
   Model,
 } from "sequelize";
 
-export interface StudentModel
-  extends Model<
-    InferAttributes<StudentModel>,
-    InferCreationAttributes<StudentModel>
-  > {
-  id: CreationOptional<number>;
-  enrollNumber: number;
-  firstName: string;
-  surnames: string;
-  fullName: string;
-  semester: number;
-  birthdate: Date;
-  email: string;
-  gender: string;
-  phoneNumber: string;
-  address: string;
-}
-
 export interface UserModel
   extends Model<
     InferAttributes<UserModel>,
     InferCreationAttributes<UserModel>
   > {
   id: CreationOptional<number>;
+  firstName: string;
+  lastName: string;
+  fullName: string;
   email: string;
-  password: string;
+  pass: string;
+  role: string;
+  address: string;
 }
 
+export interface StoreModel
+  extends Model<
+    InferAttributes<StoreModel>,
+    InferCreationAttributes<StoreModel>
+  > {
+  id: CreationOptional<number>;
+  address: string;
+}
+
+export interface ProductModel
+  extends Model<
+    InferAttributes<ProductModel>,
+    InferCreationAttributes<ProductModel>
+  > {
+  id: CreationOptional<number>;
+  name: string;
+  store_id: number;
+}
+
+export interface VisitorModel
+  extends Model<
+    InferAttributes<VisitorModel>,
+    InferCreationAttributes<VisitorModel>
+  > {
+  id: CreationOptional<number>;
+  recordId: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  birthdate: Date;
+  age: number;
+  birth_state: string;
+}

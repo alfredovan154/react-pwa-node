@@ -5,6 +5,7 @@ import Dashboard from "./components/dashboard/dashboard/Dashboard";
 import Profile from "./components/dashboard/profile/Profile";
 import Students from "./components/dashboard/students/Students";
 import { AuthProvider } from "./lib/authContext";
+import { ProtectedRoute } from "./lib/ProtectedRoute";
 
 function App() {
   return (
@@ -14,7 +15,14 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="login" index element={<LoginForm />} />
-              <Route path="dashboard" element={<Dashboard />}>
+              <Route
+                path="dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              >
                 <Route path="me" element={<Profile />} />
                 <Route path="students" element={<Students />} />
               </Route>
