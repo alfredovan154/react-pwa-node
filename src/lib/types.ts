@@ -36,7 +36,7 @@ export interface ProductModel
   > {
   id: CreationOptional<number>;
   name: string;
-  store_id: number;
+  storeId: number;
 }
 
 export interface VisitorModel
@@ -52,5 +52,5 @@ export interface VisitorModel
   email: string;
   birthdate: Date;
   age: number;
-  birth_state: string;
+  birthState: string;
 }

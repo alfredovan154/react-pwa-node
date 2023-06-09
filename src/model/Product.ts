@@ -15,7 +15,7 @@ const Product = sequalize.define<ProductModel>(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    store_id: {
+    storeId: {
       type: DataTypes.NUMBER,
       allowNull: false,
     },

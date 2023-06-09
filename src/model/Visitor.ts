@@ -36,7 +36,7 @@ const Visitor = sequalize.define<VisitorModel>("Visitor", {
     type: DataTypes.NUMBER,
     allowNull: false,
   },
-  birth_state: {
+  birthState: {
     type: DataTypes.STRING,
     allowNull: false,
   }
