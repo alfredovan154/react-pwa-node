@@ -2,11 +2,12 @@ import { useState } from "react";
 import { IconContext } from "react-icons";
 import { NavLink } from "react-router-dom";
 import {
-  IoLibrary,
-  IoLibraryOutline,
+  IoBagHandle,
+  IoBagHandleOutline, IoPeople,
+  IoPeopleOutline,
   IoPerson,
   IoPersonOutline,
-  IoShapesOutline,
+  IoShapesOutline
 } from "react-icons/io5";
 import "@/css/MobileBarMenu.css";
 
@@ -37,20 +38,38 @@ const MobileBarMenu = () => {
               </>
             )}
           </NavLink>
-          <NavLink to="students" className={"bar-menu-link"}>
+          <NavLink to="products" className={"bar-menu-link"}>
             {({ isActive }) => (
               <>
                 {isActive ? (
-                  <IoLibrary className="icon-active" />
+                  <IoBagHandle className="icon-active" />
                 ) : (
-                  <IoLibraryOutline />
+                  <IoBagHandleOutline />
                 )}
                 <span
                   className={
                     "bar-menu-link-title " + (isActive ? "title-active" : "")
                   }
                 >
-                  Estudiantes
+                  Productos
+                </span>
+              </>
+            )}
+          </NavLink>
+          <NavLink to="visitors" className={"bar-menu-link"}>
+            {({ isActive }) => (
+              <>
+                {isActive ? (
+                  <IoPeople className="icon-active" />
+                ) : (
+                  <IoPeopleOutline />
+                )}
+                <span
+                  className={
+                    "bar-menu-link-title " + (isActive ? "title-active" : "")
+                  }
+                >
+                  Visitantes
                 </span>
               </>
             )}

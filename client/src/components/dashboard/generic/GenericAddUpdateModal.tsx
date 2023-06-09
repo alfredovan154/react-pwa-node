@@ -1,5 +1,11 @@
 import React from "react";
-import { GenericAttributes, GenericFormFields, Student } from "@/lib/types";
+import {
+  GenericAttributes,
+  GenericFormFields,
+  Product,
+  Student,
+  Visitor,
+} from "@/lib/types";
 import Modal from "react-modal";
 import "@/css/GenericAddUpdateModal.css";
 
@@ -10,8 +16,8 @@ type Props = {
   isOpen: boolean;
   openModal: VoidFunction;
   closeModal: VoidFunction;
-  elementSelected: Student;
-  onUpdate: (element: Student) => {};
+  elementSelected: Student | Product | Visitor;
+  onUpdate: (element: Student | Product | Visitor) => {};
 };
 
 const customModalStyle = {
@@ -25,13 +31,18 @@ const customModalStyle = {
 Modal.setAppElement("#root");
 
 const GenericAddUpdateModal = (props: Props) => {
-  const [values, setValues] = React.useState<Student>(props.elementSelected);
+  const [values, setValues] = React.useState<Student | Product | Visitor>(
+    props.elementSelected
+  );
 
-  React.useEffect(() => { setValues(props.elementSelected)}, [props.elementSelected] )
+  React.useEffect(() => {
+    setValues(props.elementSelected);
+  }, [props.elementSelected]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let updatedValues = Object.assign({}, values);
-    updatedValues[e.target.name as keyof Student] = e.target.value.toString();
+    updatedValues[e.target.name as keyof typeof values] =
+      e.target.value.toString();
     setValues(updatedValues);
   };
 
@@ -49,9 +60,8 @@ const GenericAddUpdateModal = (props: Props) => {
             {field.icon}
             <input
               value={
-                values[
-                  field.accessor as keyof typeof props.elementSelected
-                ] || ""
+                values[field.accessor as keyof typeof props.elementSelected] ||
+                ""
               }
               type={field.inputType}
               name={field.accessor}
