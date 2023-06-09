@@ -13,14 +13,14 @@ userController.post("/login", async (req: Request, res: Response) => {
     const user = await User.findOne({
       where: {
         email: body.email,
-        password: body.password,
+        pass: body.password,
       },
     });
     if (user != null) {
       const token = jwt.sign(
         {
           email: user.email,
-          password: user.password,
+          password: user.pass,
         },
         env.SECRET_KEY
       );
@@ -33,7 +33,7 @@ userController.post("/login", async (req: Request, res: Response) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: ErrorMsg.STUDENT_REGISTERED, error: error.message });
+      .json({ message: ErrorMsg.USER_LOGIN_ERROR, error: error.message });
   }
 });
 

@@ -4,6 +4,8 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import userController from "./controller/UserController";
+import productController from "./controller/ProductController";
+import visitorController from "./controller/VisitorController";
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 //app.use(loggerMiddleware);
 app.use(morgan('common'));
 app.use("/user", userController);
+app.use("/product", productController);
+app.use("/visitor", visitorController);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
