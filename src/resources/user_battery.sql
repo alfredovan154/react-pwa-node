@@ -1,0 +1,11 @@
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (1, 'Nevil', 'Cray', 'Nevil Cray', 'ncray0@sfgate.com', 'w3yNMkz1', 'supervisor', '5598 Fremont Center');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (2, 'Fonzie', 'Gynni', 'Fonzie Gynni', 'fgynni1@dot.gov', 'kAS6x9V', 'supervisor', '3 Glendale Alley');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (3, 'Dory', 'Viel', 'Dory Viel', 'dviel2@ibm.com', 'e42l99z0', 'guest', '6780 Bellgrove Alley');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (4, 'Reba', 'Morcombe', 'Reba Morcombe', 'rmorcombe3@rediff.com', 'Xr57tmsbkRu', 'admin', '6 Jay Lane');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (5, 'Pattie', 'Sutterfield', 'Pattie Sutterfield', 'psutterfield4@blogs.com', 'gpnO95G7', 'supervisor', '9844 Chinook Road');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (6, 'Craggy', 'Meaton', 'Craggy Meaton', 'cmeaton5@hugedomains.com', 'v0fbsnPu', 'guest', '0 Del Sol Court');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (7, 'Hewet', 'Rau', 'Hewet Rau', 'hrau6@stumbleupon.com', '96f5ACqD6B7', 'admin', '71826 Katie Center');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (8, 'Ciel', 'Sarchwell', 'Ciel Sarchwell', 'csarchwell7@livejournal.com', 'UCSdrLW5aeu', 'supervisor', '54720 Del Mar Road');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (9, 'Jaymie', 'Tansey', 'Jaymie Tansey', 'jtansey8@zdnet.com', 'oZZibU', 'admin', '5179 Forest Run Court');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (10, 'Demetre', 'Seagrove', 'Demetre Seagrove', 'dseagrove9@whitehouse.gov', 'VesotJ078VD', 'guest', '6549 Macpherson Drive');
+insert into User (id, first_name, last_name, full_name, email, pass, role, address) values (11, 'Alfredo', 'Vanegas Arcega', 'Alfredo Vanegas Arcega', 'thealf154@gmail.com', 'password', 'admin', '6549 Macpherson Drive');

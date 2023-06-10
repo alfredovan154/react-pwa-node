@@ -3,6 +3,7 @@ import ErrorMsg from "../enum/ErrorMsg";
 import SuccessMsg from "../enum/SuccessMsg";
 import { ProductModel } from "../lib/types";
 import Product from "../model/Product";
+import Store from "../model/Store";
 const auth = require("../middleware/auth");
 
 const productController = express.Router();
@@ -10,7 +11,10 @@ const productController = express.Router();
 productController.get("/", auth, async (req: Request, res: Response) => {
   try {
     const filters = req.body.filters;
-    const products = await Product.findAll({ where: filters });
+    const products = await Product.findAll({
+      where: filters,
+      include: [{ model: Store, required: true }],
+    });
     return res.status(200).json(products);
   } catch (error) {
     return res.status(500).json({
@@ -31,12 +35,10 @@ productController.post("/", auth, async (req: Request, res: Response) => {
       return res.status(200).json({ message: SuccessMsg.PRODUCT_CREATED });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        message: ErrorMsg.PRODUCT_REGISTERED_UPDATED,
-        error: error.message,
-      });
+    return res.status(500).json({
+      message: ErrorMsg.PRODUCT_REGISTERED_UPDATED,
+      error: error.message,
+    });
   }
 });
 

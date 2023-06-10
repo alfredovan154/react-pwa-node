@@ -26,6 +26,7 @@ export interface StoreModel
     InferCreationAttributes<StoreModel>
   > {
   id: CreationOptional<number>;
+  storeName: string;
   address: string;
 }
 
@@ -35,7 +36,7 @@ export interface ProductModel
     InferCreationAttributes<ProductModel>
   > {
   id: CreationOptional<number>;
-  name: string;
+  productName: string;
   storeId: number;
 }
 

@@ -11,26 +11,25 @@ const Product = sequalize.define<ProductModel>(
       allowNull: false,
       primaryKey: true,
     },
-    name: {
+    productName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: "product_name",
     },
     storeId: {
       type: DataTypes.NUMBER,
       allowNull: false,
+      field: "store_id",
     },
   },
-  { timestamps: true, createdAt: false, updatedAt: false }
+  {
+    timestamps: true,
+    createdAt: false,
+    updatedAt: false,
+    freezeTableName: true,
+  }
 );
 
-Product.hasOne(Store, {
-  foreignKey: {
-    allowNull: false,
-    name: "store_id",
-  },
-  onDelete: "RESTRICT",
-});
-
-Store.belongsTo(Product);
+Product.belongsTo(Store, { foreignKey: "storeId" });
 
 export default Product;

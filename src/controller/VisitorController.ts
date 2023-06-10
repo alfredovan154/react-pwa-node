@@ -3,6 +3,7 @@ import ErrorMsg from "../enum/ErrorMsg";
 import SuccessMsg from "../enum/SuccessMsg";
 import Visitor from "../model/Visitor";
 import { VisitorModel } from "../lib/types";
+import Store from "../model/Store";
 const auth = require("../middleware/auth");
 
 const visitorController = express.Router();
@@ -10,7 +11,9 @@ const visitorController = express.Router();
 visitorController.get("/", auth, async (req: Request, res: Response) => {
   try {
     const filters = req.body.filters;
-    const visitors = await Visitor.findAll({ where: filters });
+    const visitors = await Visitor.findAll({
+      where: filters,
+    });
     return res.status(200).json(visitors);
   } catch (error) {
     return res.status(500).json({

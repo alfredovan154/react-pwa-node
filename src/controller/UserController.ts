@@ -13,7 +13,6 @@ userController.post("/login", async (req: Request, res: Response) => {
     const user = await User.findOne({
       where: {
         email: body.email,
-        pass: body.password,
       },
     });
     if (user != null) {

@@ -13,14 +13,17 @@ const User = sequalize.define<UserModel>(
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: "first_name"
     },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: "last_name"
     },
     fullName: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: "full_name"
     },
     email: {
       type: DataTypes.STRING,
@@ -37,9 +40,14 @@ const User = sequalize.define<UserModel>(
     address: {
       type: DataTypes.STRING,
       allowNull: false,
-    } 
+    },
   },
-  { timestamps: true, createdAt: false, updatedAt: false }
+  {
+    timestamps: true,
+    createdAt: false,
+    updatedAt: false,
+    freezeTableName: true,
+  }
 );
 
 export default User;
