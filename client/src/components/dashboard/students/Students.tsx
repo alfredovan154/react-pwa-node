@@ -125,25 +125,10 @@ const Students = () => {
     setIsLoading(false);
   }, [isLoading]);
 
-  const handleUpdateStudent = async (studentUpdated: Student) => {
-    await axios({
-      method: "post",
-      url: url,
-      data: studentUpdated,
-      headers: {
-        Authorization: auth.getAccessToken(),
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          closeModal();
-          setIsLoading(true);
-        }
-      })
-      .catch((error: Error) => {
-        console.log(error.message);
-      });
-  };
+  const handleUpdate = () => {
+    closeModal();
+    setIsLoading(true);
+  }
 
   const handleChangeFilters = (filters: Array<Filter>) => {
     setFilters(filters);
@@ -185,8 +170,9 @@ const Students = () => {
         isUpdateModal={studentSelected ? true : false}
         attributes={studentAttributes}
         elementSelected={studentSelected || ({} as Student)}
-        onUpdate={handleUpdateStudent}
         modalTitle="estudiante"
+        onUpdate={handleUpdate}
+        postUrl={url}
         closeModal={closeModal}
         openModal={openModal}
         isOpen={modalIsOpen}

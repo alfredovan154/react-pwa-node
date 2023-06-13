@@ -8,8 +8,10 @@ import {
 } from "@/lib/types";
 import Modal from "react-modal";
 import "@/css/GenericAddUpdateModal.css";
+import axios from "axios";
+import { useAuth } from "@/hooks/authHook";
 
-type Props = {
+interface Props {
   attributes: Array<GenericAttributes>;
   isUpdateModal: boolean;
   modalTitle: string;
@@ -17,8 +19,9 @@ type Props = {
   openModal: VoidFunction;
   closeModal: VoidFunction;
   elementSelected: Student | Product | Visitor;
-  onUpdate: (element: Student | Product | Visitor) => {};
-};
+  onUpdate: () => void;
+  postUrl: string;
+}
 
 const customModalStyle = {
   content: {
@@ -31,6 +34,7 @@ const customModalStyle = {
 Modal.setAppElement("#root");
 
 const GenericAddUpdateModal = (props: Props) => {
+  const auth = useAuth();
   const [values, setValues] = React.useState<Student | Product | Visitor>(
     props.elementSelected
   );
@@ -46,9 +50,24 @@ const GenericAddUpdateModal = (props: Props) => {
     setValues(updatedValues);
   };
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    props.onUpdate(values);
+    await axios({
+      method: "post",
+      url: props.postUrl,
+      data: values,
+      headers: {
+        Authorization: auth.getAccessToken(),
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          props.onUpdate();
+        }
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   };
 
   const fieldsInputs = props.attributes.map((field) => {

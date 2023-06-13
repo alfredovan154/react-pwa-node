@@ -1,7 +1,11 @@
-import { useSortBy, useTable } from "react-table";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import "@/css/Table.css";
 import { IoCaretDown, IoCaretUp, IoPencil, IoTrash } from "react-icons/io5";
-import { Student } from "@/lib/types";
 
 const GenericTable = ({
   columns,
@@ -10,81 +14,61 @@ const GenericTable = ({
 }: {
   columns: any;
   data: any;
-  onSelect: (student: Student) => void;
+  onSelect: (selection: any) => void;
 }) => {
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-      },
-      useSortBy,
-      (hooks) => {
-        hooks.visibleColumns.push((columns) => [
-          ...columns,
-          {
-            id: "actions",
-            Header: "Acciones",
-            Cell: ({ row }) => (
-              <div className="actions-container">
-                <button className="action-button" onClick={() => onSelect(row.original as Student)}>
-                  <IoPencil />
-                </button>
-                <button className="action-button">
-                  <IoTrash />
-                </button>
-              </div>
-            ),
-          },
-        ]);
-      }
-    );
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   return (
     <div className="generic-table-container component-element">
-      <table {...getTableProps()} className="generic-table">
+      <table>
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr
-              {...headerGroup.getHeaderGroupProps()}
-              className="generic-headers-row"
-            >
-              {headerGroup.headers.map((column: any) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  <div className="generic-headers">
-                    {column.render("Header")}
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <IoCaretDown className="table-sort-button" />
-                      ) : (
-                        <IoCaretUp className="table-sort-button" />
-                      )
-                    ) : (
-                      ""
-                    )}
-                  </div>
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()} className="generic-cells-row">
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()} className="generic-row-cell">
-                      {cell.render("Cell")}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
+        <tbody>
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
+        <tfoot>
+          {table.getFooterGroups().map(footerGroup => (
+            <tr key={footerGroup.id}>
+              {footerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
       </table>
     </div>
   );
