@@ -1,0 +1,25 @@
+.delete-modal {
+    position: absolute;
+    display: flex;
+    height: 25vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    inset: 20px;
+    top: 40%;
+}
+
+.delete-buttons-container{
+    display: flex;
+}
+
+.delete-button {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.delete-button:first-child{
+   margin-right: 20px; 
+}

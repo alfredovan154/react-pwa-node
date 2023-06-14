@@ -11,6 +11,6 @@
     "esModuleInterop": true,
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.xlsx"],
   "exclude": ["node_modules"],
 }

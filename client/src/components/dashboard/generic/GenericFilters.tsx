@@ -1,62 +1,59 @@
 import React from "react";
 import { IoFilterOutline, IoSearch } from "react-icons/io5";
 import "@/css/Filters.css";
-import { Filter, GenericAttributes } from "@/lib/types";
+import {
+  Product,
+  Student,
+  Validation,
+  Visitor
+} from "@/lib/types";
 import { IconContext } from "react-icons";
 
-const Filters = ({
-  columns,
+const GenericFilters = ({
+  filters,
   onChangeFilters,
+  attributes,
 }: {
-  columns: Array<GenericAttributes>;
-  onChangeFilters: (filters: Array<Filter>) => void;
+  filters: Partial<Visitor> | Partial<Product>;
+  onChangeFilters: (filters: any) => void;
+  attributes: Array<Validation<any>>;
 }) => {
   const [activeFiltersCount, setActiveFiltersCount] = React.useState(0);
   const [selectFiltersIsVisible, setSelectFiltersIsVisible] =
     React.useState(false);
-  const [filters, setFilters] = React.useState<Array<Filter>>(
-    columns.map((column) => ({
-      name: column.accessor,
-      value: "",
-      active: false,
-    }))
-  );
+  const [values, setValues] = React.useState<
+    Partial<Student> | Partial<Product> | Partial<Visitor>
+  >(filters);
 
-  const showSelectFilters = () => {
-    setSelectFiltersIsVisible(!selectFiltersIsVisible);
-  };
+  React.useEffect(() => {
+    setValues(filters);
+  }, [filters]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedFilters = filters.map((filter) => {
-      if (filter.name === e.target.name) {
-        let filterActive = true;
-        if (e.target.value !== "" && !filter.active) {
-          setActiveFiltersCount(activeFiltersCount + 1);
-          filterActive = true;
-        } else if (e.target.value == "" && filter.active) {
-          setActiveFiltersCount(activeFiltersCount - 1);
-          filterActive = false;
-        }
-        return { ...filter, value: e.target.value, active: filterActive };
-      }
-      return filter;
-    });
-    setFilters(updatedFilters);
+    let updatedValues = Object.assign({}, values);
+    updatedValues[e.target.name as keyof typeof values] =
+      e.target.value.toString();
+    setValues(updatedValues);
   };
 
-  const filterInputs = columns.map((column) => {
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onChangeFilters(values);
+  };
+
+  const filterInputs = attributes.map((column) => {
     return (
       <div
         className="select-filter-container component-element"
-        key={column.accessor}
+        key={column.accessor.toString()}
       >
-        <span className="select-filter-title">{column.Header}</span>
+        <span className="select-filter-title">{column.header}</span>
         <div className="filter">
           {column.icon}
           <input
             type={column.inputType}
-            name={column.accessor}
-            id={column.accessor}
+            name={column.accessor.toString()}
+            id={column.accessor.toString()}
             onChange={handleChange}
             className="filter-input"
           />
@@ -64,12 +61,9 @@ const Filters = ({
       </div>
     );
   });
-
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement> ) => {
-    e.preventDefault();
-    const activeFilters = filters.filter(f => f.active);
-    onChangeFilters(activeFilters);
-  }
+  const showSelectFilters = () => {
+    setSelectFiltersIsVisible(!selectFiltersIsVisible);
+  };
 
   return (
     <>
@@ -88,8 +82,8 @@ const Filters = ({
         <form
           className="select-filters"
           style={{ display: selectFiltersIsVisible ? "flex" : "none" }}
-          onSubmit={handleSubmit}
           method="post"
+          onSubmit={handleSubmit}
         >
           {filterInputs}
           <div className="component-element">
@@ -104,4 +98,4 @@ const Filters = ({
   );
 };
 
-export default Filters;
+export default GenericFilters;

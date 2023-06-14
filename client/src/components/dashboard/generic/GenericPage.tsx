@@ -1,28 +1,20 @@
-import { useAuth } from "@/hooks/authHook";
-import { Validation, Visitor } from "@/lib/types";
-import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
-import GenericTable from "@/components/dashboard/generic/GenericTable";
-import GenericAddUpdateModal from "../generic/GenericAddUpdateModal";
-import GenericFilters from "../generic/GenericFilters";
+import GenericFilters from "./GenericFilters";
+import GenericTable from "./GenericTable";
+import GenericAddUpdateModal from "./GenericAddUpdateModal";
+import GenericDeleteModal from "./GenericDeleteModal";
+import GenericBigButton from "./GenericBigButton";
+import { useAuth } from "@/hooks/authHook";
 import axios from "axios";
-import RowActions from "../generic/RowActions";
-import {
-  IoAdd,
-  IoCalendarClearOutline,
-  IoDownload,
-  IoDownloadOutline,
-  IoDownloadSharp,
-  IoMailOutline,
-  IoMapOutline,
-  IoPerson,
-  IoPersonOutline,
-  IoQrCodeOutline,
-} from "react-icons/io5";
-import GenericBigButton from "../generic/GenericBigButton";
-import GenericDeleteModal from "../generic/GenericDeleteModal";
+import { createColumnHelper } from "@tanstack/react-table";
+import { Product, Visitor } from "@/lib/types";
 
-const Visitors = () => {
+type Props = {
+    data: Array<Visitor | Product>;
+    url: string;
+}
+
+const GenericPage = () => {
   const auth = useAuth();
   const [visitors, setVisitors] = React.useState<Array<Visitor>>([]);
   const [modalAddUpdateIsOpen, setModalAddUpdateModal] = React.useState(false);
@@ -34,84 +26,6 @@ const Visitors = () => {
   const [filters, setFilters] = React.useState<Partial<Visitor>>({});
   const url = import.meta.env.VITE_BASE_URL + "/visitor";
   const columnHelper = createColumnHelper<Visitor>();
-
-  const validations = React.useMemo<Array<Validation<Visitor>>>(
-    () => [
-      {
-        accessor: "recordId",
-        header: "Expediente",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: false,
-        icon: <IoQrCodeOutline />,
-        inputType: "text",
-      },
-      {
-        accessor: "firstName",
-        header: "Nombre",
-        required: false,
-        isVisibleOnTable: false,
-        isOnForm: true,
-        icon: <IoPerson />,
-        inputType: "text",
-      },
-      {
-        accessor: "lastName",
-        header: "Apellidos",
-        required: false,
-        isVisibleOnTable: false,
-        isOnForm: true,
-        icon: <IoPerson />,
-        inputType: "text",
-      },
-      {
-        accessor: "fullName",
-        header: "Nombre",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: false,
-        icon: <IoPersonOutline />,
-        inputType: "text",
-      },
-      {
-        accessor: "email",
-        header: "Email",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: true,
-        icon: <IoMailOutline />,
-        inputType: "text",
-      },
-      {
-        accessor: "birthdate",
-        header: "Nacimiento",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: true,
-        icon: <IoCalendarClearOutline />,
-        inputType: "date",
-      },
-      {
-        accessor: "birthState",
-        header: "Estado",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: true,
-        icon: <IoMapOutline />,
-        inputType: "text",
-      },
-      {
-        accessor: "id",
-        header: "id",
-        required: false,
-        isVisibleOnTable: true,
-        isOnForm: false,
-        icon: <IoQrCodeOutline />,
-        inputType: "text",
-      },
-    ],
-    []
-  );
 
   const columns2 = validations
     .filter((validation) => validation.isVisibleOnTable)
@@ -229,7 +143,6 @@ const Visitors = () => {
   const handleBigButton = () => {
     setModalAddUpdateModal(true);
   };
-
   return (
     <div className="component">
       <h1 className="component-title component-element">Visitantes</h1>
@@ -270,4 +183,4 @@ const Visitors = () => {
   );
 };
 
-export default Visitors;
+export default GenericPage;

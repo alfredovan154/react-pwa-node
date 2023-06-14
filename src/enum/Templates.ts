@@ -1,3 +1,3 @@
 export enum Templates {
-    ATTENDENCE_SHEET = "Pase de lista"
+    ATTENDENCE_SHEET = "template.xlsx"
 }

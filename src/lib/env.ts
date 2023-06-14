@@ -7,6 +7,7 @@ const env = {
   DB_PASSWORD: process.env.DB_PASSWORD,
   DB_HOST: process.env.DB_HOST,
   SECRET_KEY: process.env.SECRET_KEY,
+  SECRET_CRYPTO: process.env.SECRET_CRYPTO
 };
 
 export default env;

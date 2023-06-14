@@ -1,19 +1,14 @@
 import React from "react";
-import {
-  GenericAttributes,
-  GenericFormFields,
-  Product,
-  Student,
-  Visitor,
-} from "@/lib/types";
+import { Validation, Product, Student, Visitor } from "@/lib/types";
 import Modal from "react-modal";
 import "@/css/GenericAddUpdateModal.css";
+import "@/css/Filters.css";
 import axios from "axios";
 import { useAuth } from "@/hooks/authHook";
 
 interface Props {
-  attributes: Array<GenericAttributes>;
-  isUpdateModal: boolean;
+  attributes: Array<Validation<any>>;
+  modalType: boolean;
   modalTitle: string;
   isOpen: boolean;
   openModal: VoidFunction;
@@ -72,8 +67,8 @@ const GenericAddUpdateModal = (props: Props) => {
 
   const fieldsInputs = props.attributes.map((field) => {
     return (
-      <div className="select-filter-container" key={field.accessor}>
-        <span className="field-title">{field.Header}</span>
+      <div className="select-filter-container" key={field.accessor.toString()}>
+        <span className="field-title">{field.header}</span>
         <div>
           <div className="filter">
             {field.icon}
@@ -83,8 +78,8 @@ const GenericAddUpdateModal = (props: Props) => {
                 ""
               }
               type={field.inputType}
-              name={field.accessor}
-              id={field.accessor}
+              name={field.accessor.toString()}
+              id={field.accessor.toString()}
               onChange={handleChange}
               className="filter-input"
             />
@@ -103,12 +98,12 @@ const GenericAddUpdateModal = (props: Props) => {
       >
         <form onSubmit={handleSubmit}>
           <h2>
-            {props.isUpdateModal ? "Actualizar " : "Añadir"} {props.modalTitle}
+            {props.modalType ? "Actualizar " : "Añadir"} {props.modalTitle}
           </h2>
           {fieldsInputs}
           <div className="submit-button-container">
             <button type="submit" className="generic-button">
-              {props.isUpdateModal ? "Actualizar " : "Añadir"}
+              {props.modalType ? "Actualizar " : "Añadir"}
             </button>
           </div>
         </form>

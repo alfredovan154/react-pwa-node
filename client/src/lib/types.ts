@@ -42,7 +42,7 @@ export interface Visitor {
   email: string;
   birthdate: Date;
   age: number;
-  birthState: string; 
+  birthState: string;
 }
 
 export interface Filter {
@@ -51,11 +51,14 @@ export interface Filter {
   active: boolean;
 }
 
-export interface GenericFormFields {
-  name: string;
-  value: string | null;
+export interface Validation<Type> {
+  accessor: keyof Type;
+  header: string;
   inputType: "text" | "number" | "date";
   icon: JSX.Element;
+  required: Boolean;
+  isVisibleOnTable: boolean;
+  isOnForm: boolean;
 }
 
 export interface GenericAttributes {

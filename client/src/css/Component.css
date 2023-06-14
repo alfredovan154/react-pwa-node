@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-.component:first-child{
+.component:first-child {
   margin-top: 0;
 }
 
@@ -15,14 +15,16 @@
 .component-element {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  width: -webkit-fill-available; 
+  width: -webkit-fill-available;
 }
 
-.component:hover ~ .bar-menu-container > .bar-menu{
-    visibility: hidden;
-    opacity: 0;
+.component:hover ~ .bar-menu-container > .bar-menu {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .component:hover ~ .bar-menu-container {
-    height: 50px;
+  height: 10px;
 }
+
+

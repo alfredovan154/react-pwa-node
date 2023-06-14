@@ -9,6 +9,7 @@ const Visitor = sequalize.define<VisitorModel>(
       type: DataTypes.NUMBER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true
     },
     recordId: {
       type: DataTypes.STRING,

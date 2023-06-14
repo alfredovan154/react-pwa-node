@@ -12,8 +12,6 @@ import {
 import "@/css/MobileBarMenu.css";
 
 const MobileBarMenu = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
   return (
     <IconContext.Provider
       value={{ className: "bar-menu-icons", size: "1.3rem" }}
@@ -74,14 +72,6 @@ const MobileBarMenu = () => {
               </>
             )}
           </NavLink>
-          <div className="bar-menu-link">
-            <IoShapesOutline />
-            <span className="bar-menu-link-title">Componente</span>
-          </div>
-          <div className="bar-menu-link">
-            <IoShapesOutline />
-            <span className="bar-menu-link-title">Componente</span>
-          </div>
         </div>
       </div>
     </IconContext.Provider>
