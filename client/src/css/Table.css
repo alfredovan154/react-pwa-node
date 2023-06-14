@@ -8,6 +8,7 @@
     border-collapse: collapse;
     border-spacing: 0px;
     width: 100%;
+    margin-top: 0.5rem;
 }
 
 .generic-headers-row {
@@ -40,7 +41,7 @@
 .top-buttons {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
 
 .show-select {

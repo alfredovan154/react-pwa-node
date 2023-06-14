@@ -7,27 +7,30 @@ import GenericBigButton from "./GenericBigButton";
 import { useAuth } from "@/hooks/authHook";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Product, Visitor } from "@/lib/types";
+import { Product, Validation, Visitor } from "@/lib/types";
+import RowActions from "./RowActions";
+import { IoAdd } from "react-icons/io5";
 
 type Props = {
-    data: Array<Visitor | Product>;
-    url: string;
-}
+  data: Array<any>;
+  url: string;
+  validations: Array<Validation<any>>;
+  modalTitle: string;
+  filters: Partial<any>;
+  onLoading: (loading: boolean) => void;
+  onFilters: (filters: Partial<any>) => void;
+};
 
-const GenericPage = () => {
+const GenericPage = (props: Props) => {
   const auth = useAuth();
-  const [visitors, setVisitors] = React.useState<Array<Visitor>>([]);
-  const [modalAddUpdateIsOpen, setModalAddUpdateModal] = React.useState(false);
-  const [modalDeleteIsOpen, setDeleteModal] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [visitorSelected, setVisitorSelected] = React.useState<Visitor | null>(
-    null
-  );
-  const [filters, setFilters] = React.useState<Partial<Visitor>>({});
-  const url = import.meta.env.VITE_BASE_URL + "/visitor";
-  const columnHelper = createColumnHelper<Visitor>();
+  const [modalAddUpdateIsOpen, setModalAddUpdateModalIsOpen] = React.useState(false);
+  const [modalDeleteIsOpen, setDeleteModalIsOpen] = React.useState(false);
+  const [visitorSelected, setVisitorSelected] = React.useState<
+    Visitor | Product | null
+  >(null);
+  const columnHelper = createColumnHelper<any>();
 
-  const columns2 = validations
+  const columns2 = props.validations
     .filter((validation) => validation.isVisibleOnTable)
     .map((validation) => {
       if (validation.accessor === "id") {
@@ -41,36 +44,21 @@ const GenericPage = () => {
           ),
           header: "Acciones",
         });
+      } else {
+        return columnHelper.accessor(
+          validation.accessor,
+          {
+            cell: (info) => info.getValue(),
+            header: validation.header,
+          }
+        );
       }
-      return columnHelper.accessor(validation.accessor, {
-        cell: (info) => info.getValue(),
-        header: validation.header,
-      });
     });
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      await axios({
-        method: "get",
-        url: url,
-        headers: {
-          Authorization: auth.getAccessToken(),
-        },
-        params: filters,
-      }).then((response) => {
-        setVisitors(response.data as Array<Visitor>);
-      });
-    };
-    if (isLoading) {
-      fetchData();
-    }
-    setIsLoading(false);
-  }, [isLoading]);
 
   const dowloadExcel = async () => {
     await axios({
       method: "get",
-      url: url + "/excel",
+      url: props.url + "/excel",
       responseType: "blob",
       headers: {
         Authorization: auth.getAccessToken(),
@@ -79,7 +67,7 @@ const GenericPage = () => {
       const href = URL.createObjectURL(response.data);
       const date = new Date();
       const filename =
-        "visitantes-" + date.toLocaleDateString("en-GB") + ".xlsx";
+        props.modalTitle + date.toLocaleDateString("en-GB") + ".xlsx";
 
       // create "a" HTML element with href to file & click
       const link = document.createElement("a");
@@ -96,75 +84,79 @@ const GenericPage = () => {
 
   const handleUpdate = () => {
     closeModalUpdateAddModal();
-    setIsLoading(true);
+    props.onLoading(true);
   };
 
   const handleDeletion = () => {
     closeDeleteModal();
-    setIsLoading(true);
+    props.onLoading(true);
   };
 
-  const handleChangeFilters = (filters: Visitor) => {
-    setFilters(filters);
-    setIsLoading(true);
+  const handleChangeFilters = (filters: Partial<Visitor | Product>) => {
+    props.onFilters(filters);
+    props.onLoading(true);
   };
 
   // Code for the modal
   const openModalUpdateAddModal = () => {
-    setModalAddUpdateModal(true);
+    setModalAddUpdateModalIsOpen(true);
   };
 
   const closeModalUpdateAddModal = () => {
     setVisitorSelected(null);
-    setModalAddUpdateModal(false);
+    setModalAddUpdateModalIsOpen(false);
   };
 
   const openDeleteModal = () => {
-    setDeleteModal(true);
+    setDeleteModalIsOpen(true);
   };
 
   const closeDeleteModal = () => {
     setVisitorSelected(null);
-    setDeleteModal(false);
+    setDeleteModalIsOpen(false);
   };
 
   const handleSelect = (id: number) => {
-    const visitor = visitors.filter((visitor) => visitor.id === id);
+    const visitor = props.data.filter((visitor) => visitor.id === id);
     setVisitorSelected(visitor[0]);
-    setModalAddUpdateModal(true);
+    setModalAddUpdateModalIsOpen(true);
   };
 
   const handleDelete = (id: number) => {
-    const visitor = visitors.filter((visitor) => visitor.id === id);
+    const visitor = props.data.filter((visitor) => visitor.id === id);
     setVisitorSelected(visitor[0]);
-    setDeleteModal(true);
+    setDeleteModalIsOpen(true);
   };
 
   const handleBigButton = () => {
-    setModalAddUpdateModal(true);
+    setModalAddUpdateModalIsOpen(true);
   };
   return (
     <div className="component">
       <h1 className="component-title component-element">Visitantes</h1>
       <GenericFilters
-        filters={filters}
+        filters={props.filters}
         onChangeFilters={handleChangeFilters}
-        attributes={validations.filter((validation) => validation.isOnForm)}
+        attributes={props.validations.filter(
+          (validation) => validation.isOnForm
+        )}
       />
-      {visitors ? (
+      {props.data ? (
         <GenericTable
           columns={columns2}
-          data={visitors}
+          data={props.data}
           onDownloadExcel={dowloadExcel}
         />
       ) : null}
       <GenericAddUpdateModal
         modalType={visitorSelected ? true : false}
-        attributes={validations.filter((validation) => validation.isOnForm)}
+        attributes={props.validations.filter(
+          (validation) => validation.isOnForm
+        )}
         elementSelected={visitorSelected || ({} as Visitor)}
-        modalTitle="visitante"
+        modalTitle={props.modalTitle}
         onUpdate={handleUpdate}
-        postUrl={url}
+        postUrl={props.url}
         closeModal={closeModalUpdateAddModal}
         openModal={openModalUpdateAddModal}
         isOpen={modalAddUpdateIsOpen}
@@ -174,8 +166,8 @@ const GenericPage = () => {
         openModal={openDeleteModal}
         elementSelected={visitorSelected || ({} as Visitor)}
         isOpen={modalDeleteIsOpen}
-        url={url}
-        modalTitle={"visitante"}
+        url={props.url}
+        modalTitle={props.modalTitle}
         onDeletion={handleDeletion}
       />
       <GenericBigButton icon={<IoAdd />} callback={handleBigButton} />

@@ -1,39 +1,22 @@
 import { useAuth } from "@/hooks/authHook";
 import { Validation, Visitor } from "@/lib/types";
-import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
-import GenericTable from "@/components/dashboard/generic/GenericTable";
-import GenericAddUpdateModal from "../generic/GenericAddUpdateModal";
-import GenericFilters from "../generic/GenericFilters";
 import axios from "axios";
-import RowActions from "../generic/RowActions";
 import {
-  IoAdd,
-  IoCalendarClearOutline,
-  IoDownload,
-  IoDownloadOutline,
-  IoDownloadSharp,
-  IoMailOutline,
+  IoCalendarClearOutline, IoMailOutline,
   IoMapOutline,
   IoPerson,
   IoPersonOutline,
-  IoQrCodeOutline,
+  IoQrCodeOutline
 } from "react-icons/io5";
-import GenericBigButton from "../generic/GenericBigButton";
-import GenericDeleteModal from "../generic/GenericDeleteModal";
+import GenericPage from "../generic/GenericPage";
 
 const Visitors = () => {
   const auth = useAuth();
   const [visitors, setVisitors] = React.useState<Array<Visitor>>([]);
-  const [modalAddUpdateIsOpen, setModalAddUpdateModal] = React.useState(false);
-  const [modalDeleteIsOpen, setDeleteModal] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [visitorSelected, setVisitorSelected] = React.useState<Visitor | null>(
-    null
-  );
   const [filters, setFilters] = React.useState<Partial<Visitor>>({});
+  const [isLoading, setIsLoading] = React.useState(true);
   const url = import.meta.env.VITE_BASE_URL + "/visitor";
-  const columnHelper = createColumnHelper<Visitor>();
 
   const validations = React.useMemo<Array<Validation<Visitor>>>(
     () => [
@@ -113,26 +96,13 @@ const Visitors = () => {
     []
   );
 
-  const columns2 = validations
-    .filter((validation) => validation.isVisibleOnTable)
-    .map((validation) => {
-      if (validation.accessor === "id") {
-        return columnHelper.accessor("id", {
-          cell: (info) => (
-            <RowActions
-              id={info.getValue()}
-              onEdition={handleSelect}
-              onDelete={handleDelete}
-            />
-          ),
-          header: "Acciones",
-        });
-      }
-      return columnHelper.accessor(validation.accessor, {
-        cell: (info) => info.getValue(),
-        header: validation.header,
-      });
-    });
+  const handleLoading = (loading: boolean) => {
+    setIsLoading(loading);
+  };
+
+  const handleFilters = (filters: Partial<Visitor>) => {
+    setFilters(filters);
+  };
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -153,120 +123,16 @@ const Visitors = () => {
     setIsLoading(false);
   }, [isLoading]);
 
-  const dowloadExcel = async () => {
-    await axios({
-      method: "get",
-      url: url + "/excel",
-      responseType: "blob",
-      headers: {
-        Authorization: auth.getAccessToken(),
-      },
-    }).then((response) => {
-      const href = URL.createObjectURL(response.data);
-      const date = new Date();
-      const filename =
-        "visitantes-" + date.toLocaleDateString("en-GB") + ".xlsx";
-
-      // create "a" HTML element with href to file & click
-      const link = document.createElement("a");
-      link.href = href;
-      link.setAttribute("download", filename); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-
-      // clean up "a" element & remove ObjectURL
-      document.body.removeChild(link);
-      URL.revokeObjectURL(href);
-    });
-  };
-
-  const handleUpdate = () => {
-    closeModalUpdateAddModal();
-    setIsLoading(true);
-  };
-
-  const handleDeletion = () => {
-    closeDeleteModal();
-    setIsLoading(true);
-  };
-
-  const handleChangeFilters = (filters: Visitor) => {
-    setFilters(filters);
-    setIsLoading(true);
-  };
-
-  // Code for the modal
-  const openModalUpdateAddModal = () => {
-    setModalAddUpdateModal(true);
-  };
-
-  const closeModalUpdateAddModal = () => {
-    setVisitorSelected(null);
-    setModalAddUpdateModal(false);
-  };
-
-  const openDeleteModal = () => {
-    setDeleteModal(true);
-  };
-
-  const closeDeleteModal = () => {
-    setVisitorSelected(null);
-    setDeleteModal(false);
-  };
-
-  const handleSelect = (id: number) => {
-    const visitor = visitors.filter((visitor) => visitor.id === id);
-    setVisitorSelected(visitor[0]);
-    setModalAddUpdateModal(true);
-  };
-
-  const handleDelete = (id: number) => {
-    const visitor = visitors.filter((visitor) => visitor.id === id);
-    setVisitorSelected(visitor[0]);
-    setDeleteModal(true);
-  };
-
-  const handleBigButton = () => {
-    setModalAddUpdateModal(true);
-  };
-
   return (
-    <div className="component">
-      <h1 className="component-title component-element">Visitantes</h1>
-      <GenericFilters
-        filters={filters}
-        onChangeFilters={handleChangeFilters}
-        attributes={validations.filter((validation) => validation.isOnForm)}
-      />
-      {visitors ? (
-        <GenericTable
-          columns={columns2}
-          data={visitors}
-          onDownloadExcel={dowloadExcel}
-        />
-      ) : null}
-      <GenericAddUpdateModal
-        modalType={visitorSelected ? true : false}
-        attributes={validations.filter((validation) => validation.isOnForm)}
-        elementSelected={visitorSelected || ({} as Visitor)}
-        modalTitle="visitante"
-        onUpdate={handleUpdate}
-        postUrl={url}
-        closeModal={closeModalUpdateAddModal}
-        openModal={openModalUpdateAddModal}
-        isOpen={modalAddUpdateIsOpen}
-      />
-      <GenericDeleteModal
-        closeModal={closeDeleteModal}
-        openModal={openDeleteModal}
-        elementSelected={visitorSelected || ({} as Visitor)}
-        isOpen={modalDeleteIsOpen}
-        url={url}
-        modalTitle={"visitante"}
-        onDeletion={handleDeletion}
-      />
-      <GenericBigButton icon={<IoAdd />} callback={handleBigButton} />
-    </div>
+    <GenericPage 
+      data={visitors} 
+      url={url}
+      validations={validations}
+      modalTitle="visitantes"
+      filters={filters}
+      onLoading={handleLoading}
+      onFilters={handleFilters}
+    />
   );
 };
 

@@ -27,9 +27,10 @@ const Product = sequalize.define<ProductModel>(
     createdAt: false,
     updatedAt: false,
     freezeTableName: true,
+
   }
 );
 
-Product.belongsTo(Store, { foreignKey: "storeId" });
+Product.belongsTo(Store, { foreignKey: "storeId"});
 
 export default Product;

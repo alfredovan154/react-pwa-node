@@ -14,6 +14,7 @@ productController.get("/", auth, async (req: Request, res: Response) => {
     const products = await Product.findAll({
       where: filters,
       include: [{ model: Store, required: true }],
+      raw: true
     });
     return res.status(200).json(products);
   } catch (error) {

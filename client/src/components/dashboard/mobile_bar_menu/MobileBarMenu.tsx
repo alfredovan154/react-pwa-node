@@ -7,7 +7,6 @@ import {
   IoPeopleOutline,
   IoPerson,
   IoPersonOutline,
-  IoShapesOutline
 } from "react-icons/io5";
 import "@/css/MobileBarMenu.css";
 
