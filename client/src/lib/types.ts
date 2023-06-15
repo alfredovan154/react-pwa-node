@@ -30,14 +30,8 @@ type NestedKeyOf<T, K = keyof T> = K extends keyof T & (string | number)
 export interface Product {
   id: number;
   productName: string;
-  storeId: number;
-  "Store.name": string;
-  "Store.address": string;
-  Store: {
-    id: number;
-    name: string;
-    address: string;
-  };
+  storeName: string;
+  address: string;
 }
 
 export interface Visitor {

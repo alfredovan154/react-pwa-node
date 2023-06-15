@@ -1,9 +1,16 @@
 import { useAuth } from "@/hooks/authHook";
 import { Product, Validation } from "@/lib/types";
 import React from "react";
-import { IoBagHandle, IoBagHandleOutline, IoLocationOutline, IoQrCodeOutline, IoStorefrontOutline } from "react-icons/io5";
+import {
+  IoBagHandle,
+  IoBagHandleOutline,
+  IoLocationOutline,
+  IoQrCodeOutline,
+  IoStorefrontOutline,
+} from "react-icons/io5";
 import GenericPage from "../generic/GenericPage";
 import axios from "axios";
+import { error } from "console";
 
 const Products = () => {
   const auth = useAuth();
@@ -24,7 +31,7 @@ const Products = () => {
         inputType: "text",
       },
       {
-        accessor: "Store.name",
+        accessor: "storeName",
         header: "Tienda",
         required: false,
         isVisibleOnTable: true,
@@ -33,11 +40,11 @@ const Products = () => {
         inputType: "text",
       },
       {
-        accessor: "Store.address",
+        accessor: "address",
         header: "Dirección",
         required: false,
         isVisibleOnTable: true,
-        isOnForm: false,
+        isOnForm: true,
         icon: <IoLocationOutline />,
         inputType: "text",
       },
@@ -71,9 +78,13 @@ const Products = () => {
           Authorization: auth.getAccessToken(),
         },
         params: filters,
-      }).then((response) => {
-        setProducts(response.data as Array<Product>);
-      });
+      })
+        .then((response) => {
+          setProducts(response.data as Array<Product>);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     };
     if (isLoading) {
       fetchData();

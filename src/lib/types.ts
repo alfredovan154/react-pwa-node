@@ -37,7 +37,8 @@ export interface ProductModel
   > {
   id: CreationOptional<number>;
   productName: string;
-  storeId: number;
+  storeName: string;
+  address: string;
 }
 
 export interface VisitorModel

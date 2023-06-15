@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequalize from "../lib/db";
 import { ProductModel } from "../lib/types";
-import Store from "./Store";
 
 const Product = sequalize.define<ProductModel>(
   "Product",
@@ -16,10 +15,15 @@ const Product = sequalize.define<ProductModel>(
       allowNull: false,
       field: "product_name",
     },
-    storeId: {
-      type: DataTypes.NUMBER,
+    storeName: {
+      type: DataTypes.STRING,
       allowNull: false,
-      field: "store_id",
+      field: "store_name",
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      field: "store_address",
     },
   },
   {
@@ -30,7 +34,5 @@ const Product = sequalize.define<ProductModel>(
 
   }
 );
-
-Product.belongsTo(Store, { foreignKey: "storeId"});
 
 export default Product;

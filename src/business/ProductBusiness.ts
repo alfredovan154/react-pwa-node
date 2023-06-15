@@ -1,10 +1,5 @@
 import { Response } from "express";
-import {
-  ProductModel,
-  ProductWithStoreModel,
-  StoreModel,
-  VisitorModel,
-} from "../lib/types";
+import { ProductModel } from "../lib/types";
 import path from "path";
 import { Templates } from "../enum/Templates";
 import ExcelJS from "exceljs";
@@ -13,7 +8,7 @@ import SuccessMsg from "../enum/SuccessMsg";
 import Product from "../model/Product";
 
 export const createOrUpdateProduct = async (
-  product: ProductWithStoreModel,
+  product: ProductModel,
   res: Response
 ) => {
   if (product != null) {
@@ -25,10 +20,11 @@ export const createOrUpdateProduct = async (
       return res.status(200).json({ message: SuccessMsg.PRODUCT_CREATED });
     }
   }
+  throw Error;
 };
 
 export const makeAttendenceSheet = async (
-  products: Array<ProductWithStoreModel>,
+  products: Array<ProductModel>,
   res: Response
 ) => {
   const outputPath = path.resolve(__dirname, "/../tmp/", "output1.xlsx");
@@ -44,8 +40,8 @@ export const makeAttendenceSheet = async (
     const rows = products.map((p, index) => [
       index,
       p.productName,
-      p.Store.name,
-      p.Store.address,
+      p.storeName,
+      p.address,
     ]);
     ws.addTable({
       name: "Attendence_sheet",
