@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response, response } from "express";
 import ExcelJS from "exceljs";
 import path from "path";
 import { Templates } from "../enum/Templates";
@@ -45,7 +45,7 @@ export const makeAttendenceSheet = async (
   const templatePath = path.resolve(
     __dirname,
     "./../document/",
-    Templates.ATTENDENCE_SHEET
+    Templates.VISITORS_SHEET
   );
 
   const workbook = new ExcelJS.Workbook();

@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/authHook";
 import { Product, Validation } from "@/lib/types";
 import React from "react";
-import { IoBagHandle, IoQrCodeOutline } from "react-icons/io5";
+import { IoBagHandle, IoBagHandleOutline, IoLocationOutline, IoQrCodeOutline, IoStorefrontOutline } from "react-icons/io5";
 import GenericPage from "../generic/GenericPage";
 import axios from "axios";
 
@@ -19,17 +19,17 @@ const Products = () => {
         header: "Producto",
         required: false,
         isVisibleOnTable: true,
-        isOnForm: false,
-        icon: <IoQrCodeOutline />,
+        isOnForm: true,
+        icon: <IoBagHandleOutline />,
         inputType: "text",
       },
       {
         accessor: "Store.storeName",
-        header: "Nombre de tienda",
+        header: "Tienda",
         required: false,
         isVisibleOnTable: true,
         isOnForm: true,
-        icon: <IoBagHandle />,
+        icon: <IoStorefrontOutline />,
         inputType: "text",
       },
       {
@@ -38,7 +38,7 @@ const Products = () => {
         required: false,
         isVisibleOnTable: true,
         isOnForm: true,
-        icon: <IoBagHandle />,
+        icon: <IoLocationOutline />,
         inputType: "text",
       },
       {
@@ -86,7 +86,7 @@ const Products = () => {
       data={visitors}
       url={url}
       validations={validations}
-      modalTitle="visitantes"
+      modalTitle="productos"
       filters={filters}
       onLoading={handleLoading}
       onFilters={handleFilters}

@@ -1,3 +1,4 @@
 export enum Templates {
-    ATTENDENCE_SHEET = "template.xlsx"
+    VISITORS_SHEET = "template.xlsx",
+    PRODUCTS_SHEET = "template_products.xlsx"
 }

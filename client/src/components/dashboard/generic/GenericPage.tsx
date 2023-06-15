@@ -133,7 +133,7 @@ const GenericPage = (props: Props) => {
   };
   return (
     <div className="component">
-      <h1 className="component-title component-element">Visitantes</h1>
+      <h1 className="component-title component-element">{props.modalTitle}</h1>
       <GenericFilters
         filters={props.filters}
         onChangeFilters={handleChangeFilters}

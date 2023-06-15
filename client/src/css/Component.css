@@ -10,6 +10,7 @@
 
 .component-title {
   margin-top: 0;
+  text-transform: capitalize;
 }
 
 .component-element {

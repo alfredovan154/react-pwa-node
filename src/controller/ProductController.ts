@@ -1,9 +1,13 @@
 import express, { Request, Response } from "express";
 import ErrorMsg from "../enum/ErrorMsg";
 import SuccessMsg from "../enum/SuccessMsg";
-import { ProductModel } from "../lib/types";
+import { ProductModel, ProductWithStoreModel } from "../lib/types";
 import Product from "../model/Product";
 import Store from "../model/Store";
+import {
+  createOrUpdateVisitor,
+  makeAttendenceSheet,
+} from "../business/ProductBusiness";
 const auth = require("../middleware/auth");
 
 const productController = express.Router();
@@ -14,9 +18,24 @@ productController.get("/", auth, async (req: Request, res: Response) => {
     const products = await Product.findAll({
       where: filters,
       include: [{ model: Store, required: true }],
-      raw: true
     });
     return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json({
+      message: ErrorMsg.PRODUCT_FETCHED,
+      error: error.message,
+    });
+  }
+});
+
+productController.get("/excel", auth, async (req: Request, res: Response) => {
+  try {
+    const filters = req.query;
+    const products = await Product.findAll({
+      where: filters,
+      include: [{ model: Store, required: true }],
+    });
+    makeAttendenceSheet(products as Array<ProductWithStoreModel>, res);
   } catch (error) {
     return res.status(500).json({
       message: ErrorMsg.PRODUCT_FETCHED,

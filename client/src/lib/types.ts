@@ -28,9 +28,13 @@ export interface Product {
   id: number;
   productName: string;
   storeId: number;
-  "Store.id": number;
-  "Store.storeName": string;
   "Store.address": string;
+  "Store.storeName": string;
+  Store: {
+    id: number;
+    StoreName: string;
+    address: string;
+  };
 }
 
 export interface Visitor {

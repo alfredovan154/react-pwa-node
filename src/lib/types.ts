@@ -55,3 +55,7 @@ export interface VisitorModel
   age: number;
   birthState: string;
 }
+
+export interface ProductWithStoreModel extends ProductModel {
+  Store: StoreModel;
+}
