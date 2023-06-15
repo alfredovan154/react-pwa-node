@@ -26,7 +26,7 @@ export interface StoreModel
     InferCreationAttributes<StoreModel>
   > {
   id: CreationOptional<number>;
-  storeName: string;
+  name: string;
   address: string;
 }
 

@@ -5,7 +5,7 @@ import { ProductModel, ProductWithStoreModel } from "../lib/types";
 import Product from "../model/Product";
 import Store from "../model/Store";
 import {
-  createOrUpdateVisitor,
+  createOrUpdateProduct,
   makeAttendenceSheet,
 } from "../business/ProductBusiness";
 const auth = require("../middleware/auth");
@@ -46,14 +46,8 @@ productController.get("/excel", auth, async (req: Request, res: Response) => {
 
 productController.post("/", auth, async (req: Request, res: Response) => {
   try {
-    const product = req.body as ProductModel;
-    if (product.id == null) {
-      await Product.update(product, { where: { id: product.id } });
-      return res.status(200).json({ message: SuccessMsg.PRODUCT_UPDATED });
-    } else {
-      await Product.create(product);
-      return res.status(200).json({ message: SuccessMsg.PRODUCT_CREATED });
-    }
+    const product = req.body as ProductWithStoreModel;
+    createOrUpdateProduct(product, res);
   } catch (error) {
     return res.status(500).json({
       message: ErrorMsg.PRODUCT_REGISTERED_UPDATED,
@@ -62,9 +56,10 @@ productController.post("/", auth, async (req: Request, res: Response) => {
   }
 });
 
-productController.delete("/:id", auth, async (req: Request, res: Response) => {
+productController.delete("/", auth, async (req: Request, res: Response) => {
   try {
-    await Product.destroy({ where: { id: req.params.id } });
+    const id = parseInt(req.query.id.toString())
+    await Product.destroy({ where: { id: id } });
     return res.status(200).json({ message: SuccessMsg.PRODUCT_DELETED });
   } catch (error) {
     return res

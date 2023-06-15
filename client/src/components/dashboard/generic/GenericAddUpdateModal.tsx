@@ -13,7 +13,7 @@ interface Props {
   isOpen: boolean;
   openModal: VoidFunction;
   closeModal: VoidFunction;
-  elementSelected: Student | Product | Visitor;
+  elementSelected: any;
   onUpdate: () => void;
   postUrl: string;
 }
@@ -30,7 +30,7 @@ Modal.setAppElement("#root");
 
 const GenericAddUpdateModal = (props: Props) => {
   const auth = useAuth();
-  const [values, setValues] = React.useState<Student | Product | Visitor>(
+  const [values, setValues] = React.useState<any>(
     props.elementSelected
   );
 
@@ -74,8 +74,10 @@ const GenericAddUpdateModal = (props: Props) => {
             {field.icon}
             <input
               value={
-                values[field.accessor as keyof typeof props.elementSelected] ||
-                ""
+                field.accessor
+                  .toString()
+                  .split(".")
+                  .reduce((p, c) => (p && p[c]) || null, values) || ""
               }
               type={field.inputType}
               name={field.accessor.toString()}

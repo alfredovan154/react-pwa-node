@@ -10,10 +10,11 @@ const Store = sequalize.define<StoreModel>(
       allowNull: false,
       primaryKey: true,
     },
-    storeName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "store_name"
+      field: "store_name",
+      unique: true
     },
     address: {
       type: DataTypes.STRING,

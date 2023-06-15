@@ -24,7 +24,7 @@ const Products = () => {
         inputType: "text",
       },
       {
-        accessor: "Store.storeName",
+        accessor: "Store.name",
         header: "Tienda",
         required: false,
         isVisibleOnTable: true,
@@ -37,7 +37,7 @@ const Products = () => {
         header: "Dirección",
         required: false,
         isVisibleOnTable: true,
-        isOnForm: true,
+        isOnForm: false,
         icon: <IoLocationOutline />,
         inputType: "text",
       },
