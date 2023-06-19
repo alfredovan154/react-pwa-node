@@ -7,6 +7,8 @@ import { AuthProvider } from "./lib/authContext";
 import { ProtectedRoute } from "./lib/ProtectedRoute";
 import Products from "./components/dashboard/products/Products";
 import Visitors from "./components/dashboard/visitors/Visitors";
+import RecoverPassword from "./components/recover_password/RecoverPassword";
+import ResetPassword from "./components/recover_password/ResetPassword";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="login" index element={<LoginForm />} />
+              <Route path="recover_password" element={<RecoverPassword />} />
+              <Route path="reset_password" element={<ResetPassword />} />
               <Route
                 path="dashboard"
                 element={

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler, ReactEventHandler } from "react";
 import GenericFilters from "./GenericFilters";
 import GenericTable from "./GenericTable";
 import GenericAddUpdateModal from "./GenericAddUpdateModal";
@@ -7,9 +7,11 @@ import GenericBigButton from "./GenericBigButton";
 import { useAuth } from "@/hooks/authHook";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Product, Validation, Visitor } from "@/lib/types";
+import { Action, Product, Validation, Visitor } from "@/lib/types";
 import RowActions from "./RowActions";
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoDownload, IoPencil, IoSearch, IoTrash } from "react-icons/io5";
+import ContextMenu from "../context_menu/ContextMenu";
+import "@/css/ContextMenu.css";
 
 type Props = {
   data: Array<any>;
@@ -23,12 +25,17 @@ type Props = {
 
 const GenericPage = (props: Props) => {
   const auth = useAuth();
-  const [modalAddUpdateIsOpen, setModalAddUpdateModalIsOpen] = React.useState(false);
+  const [modalAddUpdateIsOpen, setModalAddUpdateModalIsOpen] =
+    React.useState(false);
   const [modalDeleteIsOpen, setDeleteModalIsOpen] = React.useState(false);
   const [visitorSelected, setVisitorSelected] = React.useState<
     Visitor | Product | null
   >(null);
   const columnHelper = createColumnHelper<any>();
+
+  const [contextMenuIsVisible, setContextMenuIsVisible] = React.useState(false);
+  const [x, setX] = React.useState<number>(0);
+  const [y, setY] = React.useState<number>(0);
 
   const columns2 = props.validations
     .filter((validation) => validation.isVisibleOnTable)
@@ -45,13 +52,10 @@ const GenericPage = (props: Props) => {
           header: "Acciones",
         });
       } else {
-        return columnHelper.accessor(
-          validation.accessor,
-          {
-            cell: (info) => info.getValue(),
-            header: validation.header,
-          }
-        );
+        return columnHelper.accessor(validation.accessor, {
+          cell: (info) => info.getValue(),
+          header: validation.header,
+        });
       }
     });
 
@@ -131,8 +135,36 @@ const GenericPage = (props: Props) => {
   const handleBigButton = () => {
     setModalAddUpdateModalIsOpen(true);
   };
+
+  const actions: Array<Action> = [
+    {
+      name: `Añadir ${props.modalTitle}`,
+      icon: <IoAdd />,
+      onPressAction: openModalUpdateAddModal,
+    },
+    {
+      name: `Descargar excel`,
+      icon: <IoDownload/>,
+      onPressAction: dowloadExcel,
+    },
+  ];
+
+  const handleContexMenu = (e: any) => {
+    e.preventDefault();
+    setContextMenuIsVisible(!contextMenuIsVisible);
+  };
+
   return (
-    <div className="component">
+    <div
+      className="component"
+      onMouseMove={(e) => {
+        if (contextMenuIsVisible == false) {
+          setX(e.clientX);
+          setY(e.clientY);
+        }
+      }}
+      onContextMenu={(e) => handleContexMenu(e)}
+    >
       <h1 className="component-title component-element">{props.modalTitle}</h1>
       <GenericFilters
         filters={props.filters}
@@ -169,6 +201,12 @@ const GenericPage = (props: Props) => {
         url={props.url}
         modalTitle={props.modalTitle}
         onDeletion={handleDeletion}
+      />
+      <ContextMenu
+        actions={actions}
+        isVisible={contextMenuIsVisible}
+        x={x}
+        y={y}
       />
       <GenericBigButton icon={<IoAdd />} callback={handleBigButton} />
     </div>

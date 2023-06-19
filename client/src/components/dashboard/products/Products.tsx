@@ -10,7 +10,6 @@ import {
 } from "react-icons/io5";
 import GenericPage from "../generic/GenericPage";
 import axios from "axios";
-import { error } from "console";
 
 const Products = () => {
   const auth = useAuth();

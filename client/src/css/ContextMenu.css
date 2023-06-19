@@ -1,0 +1,24 @@
+.actions-context-menu-container {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    background-color: var(--background2);
+    border-radius: 10px;
+}
+
+.action-menu-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.6rem;
+    border-radius: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.action-menu-icon {
+    margin-right: 10px;
+    width: 1.1rem;
+}

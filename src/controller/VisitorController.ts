@@ -54,7 +54,7 @@ visitorController.post("/", auth, async (req: Request, res: Response) => {
 
 visitorController.delete("/", auth, async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.query.id.toString())
+    const id = parseInt(req.query.id.toString());
     await Visitor.destroy({ where: { id: id } });
     return res.status(200).json({ message: SuccessMsg.VISITOR_DELETED });
   } catch (error) {

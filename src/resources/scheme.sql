@@ -5,6 +5,7 @@ CREATE TABLE User (
     full_name VARCHAR(150) NOT NULL,
     email VARCHAR(100) NOT NULL,
     pass VARCHAR(500) NOT NULL,
+    temporary_pass VARCHAR(100),
     role VARCHAR(15) NOT NULL,
     address VARCHAR(100)
 );

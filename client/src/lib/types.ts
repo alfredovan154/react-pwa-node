@@ -20,7 +20,7 @@ export interface User {
   fullName: string;
   email: string;
   pass: string;
-  role: string;
+  role: "admin" | "guest" | "supervisor";
   address: string;
 }
 type NestedKeyOf<T, K = keyof T> = K extends keyof T & (string | number)
@@ -82,6 +82,12 @@ export interface GenericField {
   value: string | number | Date;
 }
 
+export type Action = {
+  name: string;
+  icon: JSX.Element;
+  onPressAction: () => void;
+};
+
 export type Test<Type> = {
   name: keyof Type;
   value: string;
@@ -92,3 +98,4 @@ type Join<K, P> = K extends string | number
     ? `${K}${"" extends P ? "" : "."}${P}`
     : never
   : never;
+

@@ -18,6 +18,7 @@ export interface UserModel
   pass: string;
   role: string;
   address: string;
+  temporaryPass: string;
 }
 
 export interface StoreModel
@@ -59,4 +60,11 @@ export interface VisitorModel
 
 export interface ProductWithStoreModel extends ProductModel {
   Store: StoreModel;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  temporaryPass: string;
 }

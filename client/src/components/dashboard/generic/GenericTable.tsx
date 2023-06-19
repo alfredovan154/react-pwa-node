@@ -32,6 +32,7 @@ const GenericTable = ({
     getSortedRowModel: getSortedRowModel(),
   });
 
+
   return (
     <div className="generic-table-container component-element">
       <div className="top-buttons">
@@ -85,7 +86,10 @@ const GenericTable = ({
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="generic-cells-row" data-id={row.id}>
+            <tr
+              key={row.id}
+              className="generic-cells-row"
+            >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="generic-row-cell">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

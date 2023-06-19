@@ -22,6 +22,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.2.4",
+    "nodemailer": "^6.9.3",
     "react-modal": "^3.16.1",
     "sequelize": "^6.31.0",
     "winston": "^3.8.2",

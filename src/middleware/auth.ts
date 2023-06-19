@@ -12,6 +12,7 @@ module.exports = (req: Request, res: Response, next: NextFunction) => {
     //With this, we can stop asking everytime for the token key
     //req.body.decoded = decoded;
     //Calls the other routes, ej: /pokemon
+    req['user_token'] = decoded;
     next();
   } catch (error) {
     return res

@@ -41,6 +41,11 @@ const User = sequalize.define<UserModel>(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    temporaryPass: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: "temporary_pass"
+    }
   },
   {
     timestamps: true,

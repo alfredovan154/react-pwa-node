@@ -3,7 +3,7 @@ import { IoMailOutline, IoLockClosedOutline } from "react-icons/io5";
 import "@/css/LoginForm.css";
 import axios from "axios";
 import { useAuth } from "@/hooks/authHook";
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const LoginForm = () => {
   const [email, setEmail] = React.useState<string>();
@@ -11,21 +11,6 @@ const LoginForm = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const sendRecoverEmail = () => {
-    axios({
-      method: "post",
-      url: "http://localhost:3000/login/recover_password",
-      data: {
-        email: "thealf154@gmail.com",
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      console.log(response);
-    });
-  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -85,8 +70,7 @@ const LoginForm = () => {
           </button>
         </div>
         <a
-          href="/#"
-          onClick={() => sendRecoverEmail()}
+          href="/recover_password"
           className="forgot-password"
         >
           ¿Has olvidado tu contraseña?
