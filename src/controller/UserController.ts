@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 import env from "../lib/env";
 import transporter from "../lib/transporter";
 import crypto from "crypto";
-import { ResetPasswordRequest } from "../lib/types";
+import { createOrUpdateUser } from "../business/UserController";
+import { ResetPasswordRequest, UserModel } from "../lib/types";
 const auth = require("../middleware/auth");
 const hash = crypto.createHmac("sha256", env.SECRET_CRYPTO);
 const userController = express.Router();
@@ -30,15 +31,17 @@ userController.get("/recover_password", async (req: Request, res: Response) => {
       }  target="_blank">Restaura tu contraseña</a>`;
       const mailOptions = {
         from: process.env.MAIL_USERNAME,
-        to: req.body.email,
+        to: user.email,
         subject: "Recupera tu contraseña (TEST)",
-        text: "Recupera tu contraseña clickea el link skguiente: " + link,
+        html: "<p>Recupera tu contraseña clickea el link siguiente: </p>" + link,
       };
       let mailInfo = await transporter.sendMail(mailOptions, () =>
         console.log(mailInfo)
       );
 
-      return res.status(200).json({ code: 200, message: "Email sent" });
+      return res
+        .status(200)
+        .json({ code: 200, message: SuccessMsg.EMAIL_SENT });
     }
     return res
       .status(500)
@@ -46,7 +49,7 @@ userController.get("/recover_password", async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({
       code: 500,
-      message: "Algo salió mal al restaurar la contraseña",
+      message: ErrorMsg.USER_RESTORE_PASS,
       error: error.message,
     });
   }
@@ -59,6 +62,18 @@ userController.get("/me", auth, async (req: Request, res: Response) => {
       where: { email: currentUser.email.toString() },
     });
     return res.status(200).json(userDB);
+  } catch (error) {
+    return res.status(500).json({
+      code: 500,
+      message: ErrorMsg.USER_FECTHED,
+    });
+  }
+});
+
+userController.post("/", auth, async (req: Request, res: Response) => {
+  try {
+    const user = req.body as UserModel;
+    createOrUpdateUser(user, res);
   } catch (error) {
     return res.status(500).json({
       code: 500,
