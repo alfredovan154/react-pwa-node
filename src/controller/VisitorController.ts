@@ -6,6 +6,7 @@ import { VisitorModel } from "../lib/types";
 import {
   makeAttendenceSheet,
   createOrUpdateVisitor,
+  makeZipAndClean,
 } from "../business/VisitorBusiness";
 const auth = require("../middleware/auth");
 
@@ -32,7 +33,8 @@ visitorController.get("/excel", auth, async (req: Request, res: Response) => {
     const visitors = await Visitor.findAll({
       where: filters,
     });
-    makeAttendenceSheet(visitors, res);
+    await makeAttendenceSheet(visitors);
+    makeZipAndClean(res);
   } catch (error) {
     return res.status(500).json({
       message: ErrorMsg.VISITORS_FETCHED,

@@ -8,9 +8,16 @@ import SuccessMsg from "../enum/SuccessMsg";
 import crypto from "crypto";
 import env from "../lib/env";
 import ErrorMsg from "../enum/ErrorMsg";
+import hbs from "hbs";
+import util from "util";
+import fs from "fs";
+const child_process = require("child_process");
+const ReadFile = util.promisify(fs.readFile);
 
 const _MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365;
 const hash = crypto.createHmac("sha256", env.SECRET_CRYPTO);
+
+const today = new Date().toLocaleDateString("en-GB").replace(/\//g, "-");
 
 export const createOrUpdateVisitor = async (
   visitor: VisitorModel,
@@ -19,10 +26,14 @@ export const createOrUpdateVisitor = async (
   if (visitor != null) {
     const today = new Date();
     const birthdate = new Date(visitor.birthdate);
-    visitor.age = Math.floor(Math.abs(today.getTime() - birthdate.getTime()) / _MS_PER_YEAR);
+    visitor.age = Math.floor(
+      Math.abs(today.getTime() - birthdate.getTime()) / _MS_PER_YEAR
+    );
     visitor.fullName = `${visitor.firstName} ${visitor.lastName}`;
   } else {
-    return res.status(500).json({ message: ErrorMsg.VISITOR_REGISTERED_UPDATED });
+    return res
+      .status(500)
+      .json({ message: ErrorMsg.VISITOR_REGISTERED_UPDATED });
   }
   if (visitor.id != null) {
     await Visitor.update(visitor, { where: { id: visitor.id } });
@@ -37,53 +48,60 @@ export const createOrUpdateVisitor = async (
   }
 };
 
-export const makeAttendenceSheet = async (
-  visitors: Array<VisitorModel>,
-  res: Response
-) => {
-  const outputPath = path.resolve(__dirname, "/../tmp/", "output1.xlsx");
-  const templatePath = path.resolve(
-    __dirname,
-    "./../document/",
-    Templates.VISITORS_SHEET
-  );
+export const makeAttendenceSheet = async (visitors: Array<VisitorModel>) => {
+  const options = {
+    format: "A4",
+  };
+  const templatePath = path.resolve(__dirname, "../views/visitor.hbs");
+  const cwd = path.resolve(__dirname, "../../tmp/");
+  const content = await ReadFile(templatePath, "utf8");
+  const template = hbs.handlebars.compile(content);
 
-  const workbook = new ExcelJS.Workbook();
-  workbook.xlsx.readFile(templatePath).then(async () => {
-    const ws = workbook.getWorksheet("Visitantes");
-    const rows = visitors.map((s, index) => [
-      index,
-      s.recordId,
-      s.firstName,
-      s.lastName,
-      s.fullName,
-      s.email,
-      s.birthdate,
-      s.age,
-      s.birthState,
-    ]);
-    ws.addTable({
-      name: "Attendence_sheet",
-      ref: "A10",
-      headerRow: true,
-      totalsRow: false,
-      style: {
-        theme: "TableStyleLight15",
+  visitors.splice(290).forEach((visitor) => {
+    //const browser = await puppeteer.launch();
+    //const page = await browser.newPage();
+    const data = {
+      generalData: {
+        invoice_id: visitor.id + visitor.recordId,
+        creation_date: today,
       },
-      columns: [
-        { name: "#", filterButton: true },
-        { name: "Expediente", filterButton: true },
-        { name: "Nombre", filterButton: true },
-        { name: "Apellidos", filterButton: true },
-        { name: "Nombre completo", filterButton: true },
-        { name: "Email", filterButton: true },
-        { name: "Fecha de nacimiento", filterButton: true },
-        { name: "Edad", filterButton: true },
-        { name: "Estado", filterButton: true },
+      visitorData: [
+        { attribute: "Expediente", data: visitor.recordId },
+        { attribute: "Nombre", data: visitor.firstName },
+        { attribute: "Apellidos", data: visitor.lastName },
+        { attribute: "Nombre completo", data: visitor.fullName },
+        { attribute: "Correo", data: visitor.email },
+        { attribute: "Estado", data: visitor.birthState },
+        { attribute: "Fecha de nacimiento", data: visitor.birthdate },
       ],
-      rows: rows,
+    };
+    fs.writeFile(`tmp/${visitor.id}.html`, template(data), function (err) {
+      if (err) {
+        return console.log(err);
+      }
     });
-    await workbook.xlsx.writeFile(outputPath);
-    return res.download(outputPath);
   });
+  visitors.splice(290).forEach((visitor) => {
+    child_process.execSync(
+      `wkhtmltopdf ./${visitor.id}.html ./${visitor.id}.pdf`,
+      {
+        cwd: cwd,
+        shell: "/bin/bash",
+      }
+    );
+  });
+};
+
+export const makeZipAndClean = (res: Response) => {
+  const cwd = path.resolve(__dirname, "../../tmp/");
+  child_process.execSync(`zip ${today} *.pdf`, {
+    cwd: cwd,
+    shell: "/bin/bash",
+  });
+  child_process.execSync(`rm *.html *.pdf`, {
+    cwd: cwd,
+    shell: "/bin/bash",
+  });
+
+  res.status(200).json({ code: 200, mesage: "xd" });
 };
