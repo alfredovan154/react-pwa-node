@@ -76,7 +76,7 @@ const Profile = () => {
     <div className="component" ref={componentRef}>
       {profile && !isLoading ? (
         <>
-          <h1 className="component-title component-element">Perfil</h1>
+          <h1 className="component-title component-element">¡Bienvenido!</h1>
           <div className="profile-image-container">
             <img src={ProfileImage} alt="" className="profile-image" />
           </div>

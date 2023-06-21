@@ -9,7 +9,13 @@ import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
 import { Action, Product, Validation, Visitor } from "@/lib/types";
 import RowActions from "./RowActions";
-import { IoAdd, IoDownload, IoPencil, IoSearch, IoTrash } from "react-icons/io5";
+import {
+  IoAdd,
+  IoDownload,
+  IoPencil,
+  IoSearch,
+  IoTrash,
+} from "react-icons/io5";
 import ContextMenu from "../context_menu/ContextMenu";
 import "@/css/ContextMenu.css";
 
@@ -68,21 +74,25 @@ const GenericPage = (props: Props) => {
         Authorization: auth.getAccessToken(),
       },
     }).then((response) => {
-      const href = URL.createObjectURL(response.data);
-      const date = new Date();
-      const filename =
-        props.modalTitle + date.toLocaleDateString("en-GB") + ".xlsx";
+      if (response.data.type !== "application/json") {
+        const href = URL.createObjectURL(response.data);
+        const date = new Date();
+        const filename =
+          props.modalTitle + date.toLocaleDateString("en-GB") + ".xlsx";
 
-      // create "a" HTML element with href to file & click
-      const link = document.createElement("a");
-      link.href = href;
-      link.setAttribute("download", filename); //or any other extension
-      document.body.appendChild(link);
-      link.click();
+        // create "a" HTML element with href to file & click
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", filename); //or any other extension
+        document.body.appendChild(link);
+        link.click();
 
-      // clean up "a" element & remove ObjectURL
-      document.body.removeChild(link);
-      URL.revokeObjectURL(href);
+        // clean up "a" element & remove ObjectURL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      } else {
+        alert("Cheque su correo para ver las fichas");
+      }
     });
   };
 
@@ -144,7 +154,7 @@ const GenericPage = (props: Props) => {
     },
     {
       name: `Descargar excel`,
-      icon: <IoDownload/>,
+      icon: <IoDownload />,
       onPressAction: dowloadExcel,
     },
   ];

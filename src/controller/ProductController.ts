@@ -14,7 +14,7 @@ const productController = express.Router();
 
 productController.get("/", auth, async (req: Request, res: Response) => {
   try {
-    const filters = req.body.filters;
+    const filters = req.query;
     const products = await Product.findAll({ where: filters });
     return res.status(200).json(products);
   } catch (error) {

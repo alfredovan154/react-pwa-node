@@ -24,15 +24,14 @@ userController.get("/recover_password", async (req: Request, res: Response) => {
       user.temporaryPass = temporaryPass;
       await user.save();
       const link = `<a href="${
-        env.CLIENT_URL +
-        "/user/recover_password?" +
-        "temporaryPass=" +
+        req.protocol + '://' + env.CLIENT_URL +
+        "/reset_password?temporaryPass="+
         temporaryPass
-      }  target="_blank">Restaura tu contraseña</a>`;
+      }">Restaura tu contraseña</a>`;
       const mailOptions = {
         from: process.env.MAIL_USERNAME,
         to: user.email,
-        subject: "Recupera tu contraseña (TEST)",
+        subject: "Recupera tu contraseña",
         html: "<p>Recupera tu contraseña clickea el link siguiente: </p>" + link,
       };
       let mailInfo = await transporter.sendMail(mailOptions, () =>
@@ -102,6 +101,7 @@ userController.post(
       });
       if (user != null) {
         user.pass = resetBody.password;
+        user.temporaryPass = null;
         await user.save();
         return res.status(200).json({ code: 200, message: "Password updated" });
       }

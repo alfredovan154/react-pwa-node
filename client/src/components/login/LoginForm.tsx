@@ -23,7 +23,7 @@ const LoginForm = () => {
         password: password,
       },
     }).then((response) => {
-      const from = location.state || "/dashboard";
+      const from = location.state || "/dashboard/me";
       auth.signin(response.data.accessToken, () => {
         navigate(from, { replace: true });
       });

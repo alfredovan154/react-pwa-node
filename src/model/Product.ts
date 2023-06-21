@@ -9,6 +9,7 @@ const Product = sequalize.define<ProductModel>(
       type: DataTypes.NUMBER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
     },
     productName: {
       type: DataTypes.STRING,

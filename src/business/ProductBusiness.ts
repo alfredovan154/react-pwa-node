@@ -31,7 +31,7 @@ export const makeAttendenceSheet = async (
   const templatePath = path.resolve(
     __dirname,
     "./../document/",
-    Templates.PRODUCTS_SHEET
+    Templates.VISITORS_SHEET
   );
 
   const workbook = new ExcelJS.Workbook();
@@ -45,7 +45,7 @@ export const makeAttendenceSheet = async (
     ]);
     ws.addTable({
       name: "Attendence_sheet",
-      ref: "A6",
+      ref: "A11",
       headerRow: true,
       totalsRow: false,
       style: {

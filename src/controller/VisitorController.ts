@@ -19,9 +19,16 @@ const visitorController = express.Router();
 visitorController.get("/", auth, async (req: Request, res: Response) => {
   try {
     const filters = req.query;
-    const visitors = await Visitor.findAll({
-      where: filters,
-    });
+    let visitors;
+    if (filters.birthdate) {
+      visitors = await Visitor.findAll({
+        where: { ...filters, birthdate: new Date(filters.birthdate) },
+      });
+    } else {
+      visitors = await Visitor.findAll({
+        where: filters,
+      });
+    }
     return res.status(200).json(visitors);
   } catch (error) {
     return res.status(500).json({
