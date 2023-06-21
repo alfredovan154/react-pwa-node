@@ -78,17 +78,16 @@ export const makeAttendenceSheet = async (visitors: Array<VisitorModel>) => {
     fs.writeFile(`tmp/${visitor.id}.html`, template(data), function (err) {
       if (err) {
         return console.log(err);
+      } else {
+        child_process.exec(
+          `wkhtmltopdf ./${visitor.id}.html ./${visitor.id}.pdf`,
+          {
+            cwd: cwd,
+            shell: "/bin/bash",
+          }
+        );
       }
     });
-  });
-  visitors.splice(290).forEach((visitor) => {
-    child_process.execSync(
-      `wkhtmltopdf ./${visitor.id}.html ./${visitor.id}.pdf`,
-      {
-        cwd: cwd,
-        shell: "/bin/bash",
-      }
-    );
   });
 };
 

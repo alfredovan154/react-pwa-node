@@ -33,8 +33,8 @@ visitorController.get("/excel", auth, async (req: Request, res: Response) => {
     const visitors = await Visitor.findAll({
       where: filters,
     });
-    await makeAttendenceSheet(visitors);
-    makeZipAndClean(res);
+    makeAttendenceSheet(visitors);
+    res.status(200).json({ code: 200, mesage: "xd" });
   } catch (error) {
     return res.status(500).json({
       message: ErrorMsg.VISITORS_FETCHED,
