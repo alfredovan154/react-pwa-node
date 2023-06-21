@@ -6,8 +6,12 @@ import { VisitorModel } from "../lib/types";
 import {
   makeAttendenceSheet,
   createOrUpdateVisitor,
-  makeZipAndClean,
+  zipPDF,
+  sendZipPDF,
+  cleanTmp,
 } from "../business/VisitorBusiness";
+import User from "../model/User";
+import { emit } from "process";
 const auth = require("../middleware/auth");
 
 const visitorController = express.Router();
@@ -34,6 +38,15 @@ visitorController.get("/excel", auth, async (req: Request, res: Response) => {
       where: filters,
     });
     makeAttendenceSheet(visitors);
+    const currentUser = req["user_token"];
+    const userDB = await User.findOne({
+      where: { email: currentUser.email.toString() },
+    });
+    if (userDB != null) {
+      zipPDF()
+        .then(() => sendZipPDF(userDB.email))
+        .then(() => cleanTmp);
+    }
     res.status(200).json({ code: 200, mesage: "xd" });
   } catch (error) {
     return res.status(500).json({

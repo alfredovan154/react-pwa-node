@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import env from "../lib/env";
 import transporter from "../lib/transporter";
 import crypto from "crypto";
-import { createOrUpdateUser } from "../business/UserController";
+import { createOrUpdateUser } from "../business/UserBusiness";
 import { ResetPasswordRequest, UserModel } from "../lib/types";
 const auth = require("../middleware/auth");
 const hash = crypto.createHmac("sha256", env.SECRET_CRYPTO);
